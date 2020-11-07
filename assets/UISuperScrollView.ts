@@ -8,6 +8,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
     private _rightBoundary: number
     public deltaMove = cc.Vec2.ZERO
     public get view(): cc.Node { return this['_view'] }
+    public set autoScrolling(value: boolean) { this['_autoScrolling'] = value }
     public get autoScrolling() { return this['_autoScrolling'] }
     private _layout: UISuperLayout = null
     private get layout(): UISuperLayout {

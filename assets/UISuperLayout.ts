@@ -117,7 +117,9 @@ export default class UISuperLayout extends cc.Component {
             this.scrollToRight(timeInSecond, attenuated)
         }
     }
-
+    public resetScrollView() {
+        this.scrollView.autoScrolling = true
+    }
     private scrollToTop(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.VERTICAL) return
         this.refreshStart()
