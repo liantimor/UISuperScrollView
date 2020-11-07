@@ -1,0 +1,103 @@
+2020-11-07T00:01:49.969Z - normal: Load ~/.CocosCreator/settings.json
+2020-11-07T00:01:50.016Z - normal: Initializing Asset Database
+2020-11-07T00:01:50.018Z - normal: checking language setting...
+2020-11-07T00:01:50.018Z - normal: Language: zh
+2020-11-07T00:01:51.158Z - success: protocol editor-framework registered
+2020-11-07T00:01:51.158Z - success: protocol app registered
+2020-11-07T00:01:51.158Z - success: protocol theme registered
+2020-11-07T00:01:51.158Z - success: protocol packages registered
+2020-11-07T00:01:51.158Z - success: protocol uuid registerred
+2020-11-07T00:01:51.158Z - success: protocol db registerred
+2020-11-07T00:01:51.158Z - success: protocol thumbnail registerred
+2020-11-07T00:01:51.159Z - success: protocol unpack registerred
+2020-11-07T00:01:51.159Z - success: protocol disable-commonjs registerred
+2020-11-07T00:01:53.692Z - normal: connected!
+2020-11-07T00:01:53.693Z - normal: Check project /Users/weilaijia/Documents/NewProject_1
+2020-11-07T00:01:53.696Z - normal: Initializing project /Users/weilaijia/Documents/NewProject_1
+2020-11-07T00:01:53.859Z - success: adapters loaded
+2020-11-07T00:01:53.862Z - success: asset-db-debugger loaded
+2020-11-07T00:01:53.941Z - success: fb-audience-network loaded
+2020-11-07T00:01:53.990Z - success: fb-live-stream loaded
+2020-11-07T00:01:53.991Z - success: google-play-instant loaded
+2020-11-07T00:01:53.992Z - success: jsb-adapter loaded
+2020-11-07T00:01:53.995Z - success: package-manager loaded
+2020-11-07T00:01:53.995Z - success: runtime-adapters loaded
+2020-11-07T00:01:53.997Z - success: runtime-dev-tools loaded
+2020-11-07T00:01:53.998Z - success: ui-kit-preview-extra loaded
+2020-11-07T00:01:54.001Z - success: ui-kit-preview loaded
+2020-11-07T00:01:54.043Z - success: alipay-minigame loaded
+2020-11-07T00:01:54.049Z - success: assets loaded
+2020-11-07T00:01:54.051Z - success: baidugame-opendata loaded
+2020-11-07T00:01:54.052Z - success: baidugame loaded
+2020-11-07T00:01:54.055Z - success: builder loaded
+2020-11-07T00:01:54.056Z - success: bytedance-opendata loaded
+2020-11-07T00:01:54.058Z - success: bytedance loaded
+2020-11-07T00:01:54.061Z - success: channel-upload-tools loaded
+2020-11-07T00:01:54.068Z - success: cloud-function loaded
+2020-11-07T00:01:54.284Z - success: cocos-services loaded
+2020-11-07T00:01:54.286Z - success: console loaded
+2020-11-07T00:01:54.288Z - success: curve-editor loaded
+2020-11-07T00:01:54.295Z - success: fb-instant-games loaded
+2020-11-07T00:01:54.298Z - success: game-window loaded
+2020-11-07T00:01:54.299Z - success: google-instant-games loaded
+2020-11-07T00:01:54.303Z - success: hierarchy loaded
+2020-11-07T00:01:54.306Z - success: huawei-agc loaded
+2020-11-07T00:01:54.308Z - success: huawei-runtime loaded
+2020-11-07T00:01:54.312Z - success: inspector loaded
+2020-11-07T00:01:54.323Z - success: cpk-publish loaded
+2020-11-07T00:01:54.324Z - success: keystore loaded
+2020-11-07T00:01:54.338Z - success: link-sure-runtime loaded
+2020-11-07T00:01:54.350Z - success: node-library loaded
+2020-11-07T00:01:54.351Z - success: open-recent-items loaded
+2020-11-07T00:01:54.353Z - success: oppo-runtime loaded
+2020-11-07T00:01:54.355Z - success: package-asset loaded
+2020-11-07T00:01:54.356Z - success: preferences loaded
+2020-11-07T00:01:54.359Z - success: project-importer loaded
+2020-11-07T00:01:54.361Z - success: project-settings loaded
+2020-11-07T00:01:54.371Z - success: qtt-runtime loaded
+2020-11-07T00:01:54.374Z - success: scene loaded
+2020-11-07T00:01:54.375Z - success: simulator-debugger loaded
+2020-11-07T00:01:54.376Z - success: sprite-editor loaded
+2020-11-07T00:01:54.422Z - success: store loaded
+2020-11-07T00:01:54.425Z - success: timeline loaded
+2020-11-07T00:01:54.428Z - success: vivo-runtime loaded
+2020-11-07T00:01:54.430Z - success: wechatgame-opendata loaded
+2020-11-07T00:01:54.434Z - success: wechatgame loaded
+2020-11-07T00:01:54.437Z - success: xiaomi-runtime loaded
+2020-11-07T00:01:54.576Z - success: im-plugin loaded
+2020-11-07T00:01:54.577Z - warn: The current '7456' preview port is already occupied, the port is automatically incremented
+2020-11-07T00:01:54.577Z - success: preview server running at http://localhost:7457
+2020-11-07T00:01:59.560Z - info: Cocos Service load base data!
+2020-11-07T00:01:59.864Z - normal: Initializing Cocos2d
+2020-11-07T00:02:00.113Z - normal: Initializing engine extends
+2020-11-07T00:02:02.952Z - normal: Loading packages
+2020-11-07T00:02:02.954Z - normal: Watching packages
+2020-11-07T00:02:03.071Z - normal: Run Application
+2020-11-07T02:09:25.744Z - error: Error: Parsing file /Users/weilaijia/Documents/NewProject_1/temp/quick-scripts/src/assets/testPanel.js: Unexpected token (65:12)
+    at Deps.parseDeps (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:481:28)
+    at getDeps (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:414:40)
+    at /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:398:32
+    at ConcatStream.<anonymous> (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/index.js:36:43)
+    at ConcatStream.emit (events.js:199:15)
+    at ConcatStream.EventEmitter.emit (domain.js:469:20)
+    at finishMaybe (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:475:14)
+    at endWritable (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:485:3)
+    at ConcatStream.Writable.end (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:455:41)
+    at DestroyableTransform.onend (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/readable-stream/lib/_stream_readable.js:577:10)
+    at m._parseEntry (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/editor/share/quick-compile/index.js:212:20)
+    at processTicksAndRejections (internal/process/task_queues.js:86:5)
+2020-11-07T02:09:26.096Z - failed: load script [./assets/testPanel] failed : /Users/weilaijia/Documents/NewProject_1/temp/quick-scripts/dst/assets/testPanel.js:65
+            ;
+            ^
+
+SyntaxError: Unexpected token ;
+    at new Script (vm.js:85:7)
+    at createScript (vm.js:266:10)
+    at Object.runInThisContext (vm.js:314:10)
+    at Module._compile (internal/modules/cjs/loader.js:766:26)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:851:10)
+    at Module.load (internal/modules/cjs/loader.js:701:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:633:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:625:3)
+    at Module.require (internal/modules/cjs/loader.js:739:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
