@@ -222,11 +222,15 @@ var UISuperLayout = /** @class */ (function (_super) {
         cc.Component.EventHandler.emitEvents(this.refreshItemEvents, target, index);
     };
     UISuperLayout.prototype.isOutOfBoundaryTop = function (node) {
-        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(node.width * 2, -node.height * 2));
+        var width = node.width * this.getUsedScaleValue(node.scaleX) * 2;
+        var height = -node.height * this.getUsedScaleValue(node.scaleY) * 2;
+        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
         return offset;
     };
     UISuperLayout.prototype.isOutOfBoundaryBottom = function (node) {
-        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(-node.width * 2, node.height * 2));
+        var width = -node.width * this.getUsedScaleValue(node.scaleX) * 2;
+        var height = node.height * this.getUsedScaleValue(node.scaleY) * 2;
+        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
         return offset;
     };
     __decorate([

@@ -23,13 +23,13 @@ export default class testPanel extends cc.Component {
     // 刷新数据
     refreshItemEvent(node: cc.Node, index: number) {
         let info = this.datas[index]
-        node.getComponent(item).show(info)
         if (this.isRandomHeight) {
             node.height = info.randomHeight
         }
         if (this.isRandomWidth) {
             node.width = info.randomWidth
         }
+        node.getComponent(item).show(info)
     }
 
     toHeader() {

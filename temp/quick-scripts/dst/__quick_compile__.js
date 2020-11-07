@@ -1,6 +1,6 @@
 
 (function () {
-var scripts = [{"deps":{"./assets/testPanel":4,"./assets/UISuperLayout":2,"./assets/item":5,"./assets/UISuperScrollView":1,"./assets/UISuperItem":3},"path":"preview-scripts/__qc_index__.js"},{"deps":{"./UISuperLayout":2},"path":"preview-scripts/assets/UISuperScrollView.js"},{"deps":{"./UISuperItem":3,"./UISuperScrollView":1},"path":"preview-scripts/assets/UISuperLayout.js"},{"deps":{"./UISuperLayout":2},"path":"preview-scripts/assets/UISuperItem.js"},{"deps":{"./UISuperLayout":2,"./item":5},"path":"preview-scripts/assets/testPanel.js"},{"deps":{},"path":"preview-scripts/assets/item.js"}];
+var scripts = [{"deps":{"./assets/UISuperLayout":5,"./assets/item":2,"./assets/testPanel":1,"./assets/UISuperScrollView":3,"./assets/UISuperItem":4},"path":"preview-scripts/__qc_index__.js"},{"deps":{"./UISuperLayout":5,"./item":2},"path":"preview-scripts/assets/testPanel.js"},{"deps":{},"path":"preview-scripts/assets/item.js"},{"deps":{"./UISuperLayout":5},"path":"preview-scripts/assets/UISuperScrollView.js"},{"deps":{"./UISuperLayout":5},"path":"preview-scripts/assets/UISuperItem.js"},{"deps":{"./UISuperItem":4,"./UISuperScrollView":3},"path":"preview-scripts/assets/UISuperLayout.js"}];
 var entries = ["preview-scripts/__qc_index__.js"];
 var bundleScript = 'preview-scripts/__qc_bundle__.js';
 

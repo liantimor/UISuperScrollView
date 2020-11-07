@@ -14,7 +14,7 @@
   {
     "__type__": "cc.Node",
     "_name": "verticalItem",
-    "_objFlags": 0,
+    "_objFlags": 512,
     "_parent": null,
     "_children": [
       {
@@ -43,19 +43,19 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 700,
+      "width": 1050,
       "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 1
     },
     "_trs": {
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        480,
+        0,
         -39.158,
         0,
         0,
@@ -63,7 +63,7 @@
         0,
         1,
         1,
-        1,
+        0.5,
         1
       ]
     },
@@ -113,14 +113,14 @@
     "_anchorPoint": {
       "__type__": "cc.Vec2",
       "x": 0.5,
-      "y": 0.5
+      "y": 1
     },
     "_trs": {
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        -23,
         0,
         0,
         0,

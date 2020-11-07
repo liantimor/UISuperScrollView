@@ -25,6 +25,12 @@ export default class UISpuerItem extends cc.Component {
         rect.transformMat4(rect, this.node['_worldMatrix']);
         return rect
     }
+    private get width() {
+        return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX)
+    }
+    private get height() {
+        return this.node.height * this.layout.getUsedScaleValue(this.node.scaleY)
+    }
     private get isHeader() {
         return this.node.getSiblingIndex() == 0
     }
@@ -64,11 +70,11 @@ export default class UISpuerItem extends cc.Component {
         if (prevNode) {
             if (this.layout.startAxis == UISuperAxis.VERTICAL) {
                 let prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY)
-                let offset = (prevNode.y - (prevHeight * prevNode.anchorY)) - (this.node.height * (1 - this.node.anchorY)) - this.layout.spacing.y
+                let offset = (prevNode.y - (prevHeight * prevNode.anchorY)) - (this.height * (1 - this.node.anchorY)) - this.layout.spacing.y
                 this.node.y = offset
             } else if (this.layout.startAxis == UISuperAxis.HORIZONTAL) {
                 let prevWidth = prevNode.width * this.layout.getUsedScaleValue(prevNode.scaleX)
-                let offset = prevNode.x + (prevWidth * (1 - prevNode.anchorX)) + (this.node.width * this.node.anchorX) + this.layout.spacing.x
+                let offset = prevNode.x + (prevWidth * (1 - prevNode.anchorX)) + (this.width * this.node.anchorX) + this.layout.spacing.x
                 this.node.x = offset
             }
         }
@@ -77,11 +83,11 @@ export default class UISpuerItem extends cc.Component {
         if (prevNode) {
             if (this.layout.startAxis == UISuperAxis.VERTICAL) {
                 let prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY)
-                let offset = prevNode.y + (prevHeight * (1 - prevNode.anchorY)) + (this.node.height * this.node.anchorY) + this.layout.spacing.y
+                let offset = prevNode.y + (prevHeight * (1 - prevNode.anchorY)) + (this.height * this.node.anchorY) + this.layout.spacing.y
                 this.node.y = offset
             } else if (this.layout.startAxis == UISuperAxis.HORIZONTAL) {
                 let prevWidth = prevNode.width * this.layout.getUsedScaleValue(prevNode.scaleX)
-                let offset = prevNode.x - (prevWidth * prevNode.anchorX) - (this.node.width * (1 - this.node.anchorX)) - this.layout.spacing.x
+                let offset = prevNode.x - (prevWidth * prevNode.anchorX) - (this.width * (1 - this.node.anchorX)) - this.layout.spacing.x
                 this.node.x = offset
             }
         }
@@ -98,9 +104,9 @@ export default class UISpuerItem extends cc.Component {
             let offset = this.isOutOfBoundaryTop(this.node)
             if (this.isOutOfBoundary(offset)) {
                 this.node['index'] = this.layout.footer['index'] + 1
+                this.refreshItemCallback(this.node, this.node['index'])
                 this.relativePositionBottom(this.layout.footer)
                 this.node.setSiblingIndex(this.layout.node.childrenCount - 1)
-                this.refreshItemCallback(this.node, this.node['index'])
             }
         }
         // 向上填充
@@ -109,9 +115,9 @@ export default class UISpuerItem extends cc.Component {
             let offset = this.isOutOfBoundaryBottom(this.node)
             if (this.isOutOfBoundary(offset)) {
                 this.node['index'] = this.layout.header['index'] - 1
+                this.refreshItemCallback(this.node, this.node['index'])
                 this.relativePositionTop(this.layout.header)
                 this.node.setSiblingIndex(0)
-                this.refreshItemCallback(this.node, this.node['index'])
             }
         }
     }

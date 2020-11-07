@@ -51,13 +51,13 @@ var testPanel = /** @class */ (function (_super) {
     // 刷新数据
     testPanel.prototype.refreshItemEvent = function (node, index) {
         var info = this.datas[index];
-        node.getComponent(item_1.default).show(info);
         if (this.isRandomHeight) {
             node.height = info.randomHeight;
         }
         if (this.isRandomWidth) {
             node.width = info.randomWidth;
         }
+        node.getComponent(item_1.default).show(info);
     };
     testPanel.prototype.toHeader = function () {
         this.layout.scrollToHeader(0.5);

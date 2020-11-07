@@ -32,7 +32,7 @@ var item = /** @class */ (function (_super) {
         return _this;
     }
     item.prototype.show = function (info) {
-        this.label.string = info.title;
+        this.label.string = info.title + " width=" + this.node.width + " height=" + this.node.height;
     };
     __decorate([
         property(cc.Label)

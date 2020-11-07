@@ -48,6 +48,20 @@ var UISpuerItem = /** @class */ (function (_super) {
         rect.transformMat4(rect, this.node['_worldMatrix']);
         return rect;
     };
+    Object.defineProperty(UISpuerItem.prototype, "width", {
+        get: function () {
+            return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX);
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UISpuerItem.prototype, "height", {
+        get: function () {
+            return this.node.height * this.layout.getUsedScaleValue(this.node.scaleY);
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(UISpuerItem.prototype, "isHeader", {
         get: function () {
             return this.node.getSiblingIndex() == 0;
@@ -101,12 +115,12 @@ var UISpuerItem = /** @class */ (function (_super) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
                 var prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY);
-                var offset = (prevNode.y - (prevHeight * prevNode.anchorY)) - (this.node.height * (1 - this.node.anchorY)) - this.layout.spacing.y;
+                var offset = (prevNode.y - (prevHeight * prevNode.anchorY)) - (this.height * (1 - this.node.anchorY)) - this.layout.spacing.y;
                 this.node.y = offset;
             }
             else if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.HORIZONTAL) {
                 var prevWidth = prevNode.width * this.layout.getUsedScaleValue(prevNode.scaleX);
-                var offset = prevNode.x + (prevWidth * (1 - prevNode.anchorX)) + (this.node.width * this.node.anchorX) + this.layout.spacing.x;
+                var offset = prevNode.x + (prevWidth * (1 - prevNode.anchorX)) + (this.width * this.node.anchorX) + this.layout.spacing.x;
                 this.node.x = offset;
             }
         }
@@ -115,12 +129,12 @@ var UISpuerItem = /** @class */ (function (_super) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
                 var prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY);
-                var offset = prevNode.y + (prevHeight * (1 - prevNode.anchorY)) + (this.node.height * this.node.anchorY) + this.layout.spacing.y;
+                var offset = prevNode.y + (prevHeight * (1 - prevNode.anchorY)) + (this.height * this.node.anchorY) + this.layout.spacing.y;
                 this.node.y = offset;
             }
             else if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.HORIZONTAL) {
                 var prevWidth = prevNode.width * this.layout.getUsedScaleValue(prevNode.scaleX);
-                var offset = prevNode.x - (prevWidth * prevNode.anchorX) - (this.node.width * (1 - this.node.anchorX)) - this.layout.spacing.x;
+                var offset = prevNode.x - (prevWidth * prevNode.anchorX) - (this.width * (1 - this.node.anchorX)) - this.layout.spacing.x;
                 this.node.x = offset;
             }
         }
@@ -138,9 +152,9 @@ var UISpuerItem = /** @class */ (function (_super) {
             var offset = this.isOutOfBoundaryTop(this.node);
             if (this.isOutOfBoundary(offset)) {
                 this.node['index'] = this.layout.footer['index'] + 1;
+                this.refreshItemCallback(this.node, this.node['index']);
                 this.relativePositionBottom(this.layout.footer);
                 this.node.setSiblingIndex(this.layout.node.childrenCount - 1);
-                this.refreshItemCallback(this.node, this.node['index']);
             }
         }
         // 向上填充
@@ -150,9 +164,9 @@ var UISpuerItem = /** @class */ (function (_super) {
             var offset = this.isOutOfBoundaryBottom(this.node);
             if (this.isOutOfBoundary(offset)) {
                 this.node['index'] = this.layout.header['index'] - 1;
+                this.refreshItemCallback(this.node, this.node['index']);
                 this.relativePositionTop(this.layout.header);
                 this.node.setSiblingIndex(0);
-                this.refreshItemCallback(this.node, this.node['index']);
             }
         }
     };

@@ -196,11 +196,15 @@ export default class UISuperLayout extends cc.Component {
         cc.Component.EventHandler.emitEvents(this.refreshItemEvents, target, index)
     }
     private isOutOfBoundaryTop(node: cc.Node) {
-        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(node.width * 2, -node.height * 2))
+        let width = node.width * this.getUsedScaleValue(node.scaleX) * 2
+        let height = -node.height * this.getUsedScaleValue(node.scaleY) * 2
+        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
         return offset
     }
     private isOutOfBoundaryBottom(node: cc.Node) {
-        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(-node.width * 2, node.height * 2))
+        let width = -node.width * this.getUsedScaleValue(node.scaleX) * 2
+        let height = node.height * this.getUsedScaleValue(node.scaleY) * 2
+        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
         return offset
     }
 }
