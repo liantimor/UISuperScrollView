@@ -6,6 +6,6 @@ export default class item extends cc.Component {
     @property(cc.Label) label: cc.Label = null
 
     public show(info: any) {
-        this.label.string = `${info.title} width=${this.node.width} height=${this.node.height}`
+        this.label.string = `${info.title}`
     }
 }
