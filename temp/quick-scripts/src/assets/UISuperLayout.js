@@ -137,6 +137,9 @@ var UISuperLayout = /** @class */ (function (_super) {
             this.scrollToRight(timeInSecond, attenuated);
         }
     };
+    UISuperLayout.prototype.resetScrollView = function () {
+        this.scrollView.autoScrolling = true;
+    };
     UISuperLayout.prototype.scrollToTop = function (timeInSecond, attenuated) {
         if (this.startAxis != UISuperAxis.VERTICAL)
             return;
@@ -202,7 +205,7 @@ var UISuperLayout = /** @class */ (function (_super) {
             if (!this.node.children[i]) {
                 var child_1 = cc.instantiate(this.prefab);
                 child_1['index'] = i;
-                var script = child_1.addComponent(UISuperItem_1.default);
+                var script = child_1.getComponent(UISuperItem_1.default) || child_1.addComponent(UISuperItem_1.default);
                 // 将这三个方法以回调的方式传递过去 (对外不公开调用)
                 script.init(this, this.refreshItem.bind(this), this.isOutOfBoundaryTop.bind(this), this.isOutOfBoundaryBottom.bind(this));
                 this.node.addChild(child_1);

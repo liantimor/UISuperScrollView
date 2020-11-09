@@ -2,10 +2,6 @@ import UISuperLayout from './UISuperLayout';
 const { ccclass, property } = cc._decorator;
 @ccclass
 export default class UISpuerScrollView extends cc.ScrollView {
-    private _topBoundary: number
-    private _bottomBoundary: number
-    private _leftBoundary: number
-    private _rightBoundary: number
     public deltaMove = cc.Vec2.ZERO
     public get view(): cc.Node { return this['_view'] }
     public set autoScrolling(value: boolean) { this['_autoScrolling'] = value }

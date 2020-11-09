@@ -178,7 +178,7 @@ export default class UISuperLayout extends cc.Component {
             if (!this.node.children[i]) {
                 let child = cc.instantiate(this.prefab)
                 child['index'] = i
-                let script = child.addComponent(UISpuerItem)
+                let script = child.getComponent(UISpuerItem) || child.addComponent(UISpuerItem)
                 // 将这三个方法以回调的方式传递过去 (对外不公开调用)
                 script.init(this, this.refreshItem.bind(this), this.isOutOfBoundaryTop.bind(this), this.isOutOfBoundaryBottom.bind(this))
                 this.node.addChild(child)

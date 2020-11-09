@@ -40,6 +40,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
     });
     Object.defineProperty(UISpuerScrollView.prototype, "autoScrolling", {
         get: function () { return this['_autoScrolling']; },
+        set: function (value) { this['_autoScrolling'] = value; },
         enumerable: false,
         configurable: true
     });

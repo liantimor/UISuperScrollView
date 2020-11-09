@@ -462,8 +462,8 @@
     "startAxis": 0,
     "paddingTop": 0,
     "paddingBottom": 0,
-    "paddingLeft": 50,
-    "paddingRight": 50,
+    "paddingLeft": 10,
+    "paddingRight": 10,
     "spacing": {
       "__type__": "cc.Vec2",
       "x": 10,
