@@ -104,6 +104,8 @@ var UISuperLayout = /** @class */ (function (_super) {
     };
     /** 设置最大item数量 */
     UISuperLayout.prototype.total = function (value) {
+        this.scrollView.stopAutoScroll();
+        this.scrollView.release();
         this.maxItemTotal = value;
         this.moreRemLessAdd();
         var offset = 0;

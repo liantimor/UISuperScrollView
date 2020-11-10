@@ -1,15 +1,21 @@
-import UISuperLayout from './UISuperLayout';
+import UISuperLayout, { UISuperAxis } from './UISuperLayout';
 import item from './item';
+import UISpuerScrollView from './UISuperScrollView';
 const { ccclass, property } = cc._decorator;
 @ccclass
 export default class testPanel extends cc.Component {
 
     @property(UISuperLayout) layout: UISuperLayout = null
+    @property(cc.Node) header: cc.Node = null
+    @property(cc.Node) refreshing: cc.Node = null
+    @property(cc.Node) footer: cc.Node = null
+    @property(cc.Node) loading: cc.Node = null
     private isRandomHeight: boolean = false
     private isRandomWidth: boolean = false
     // 模拟数据总数
-    private total: number = 10000
+    private total: number = 50
     private datas: any[] = []
+
     onLoad() {
         for (let i = 0; i < this.total; i++) {
             this.datas.push({
@@ -29,7 +35,7 @@ export default class testPanel extends cc.Component {
         if (this.isRandomWidth) {
             node.width = info.randomWidth
         }
-        node.getComponent(item).show(info)
+        node.getComponent(item).show(info, index, this.onRemoveItem.bind(this))
     }
 
     toHeader() {
@@ -65,4 +71,89 @@ export default class testPanel extends cc.Component {
         this.isRandomWidth = !this.isRandomWidth
         this.toHeader()
     }
+    // 
+    /**
+    * 下拉刷新
+    * 核心代码 请看 第一步 第二步 其余的都是一些的效果测试代码 你可以自己实现任何效果
+    */
+    pullDownRefresh(scroll: UISpuerScrollView, event: { refresh: boolean, progress: number }) {
+        // 模拟代码  一些UI效果
+        this.header.opacity = event.progress * 255
+        if (event.progress == 1) {
+            this.header.getComponentInChildren(cc.Label).string = '松开刷新'
+        } else {
+            this.header.getComponentInChildren(cc.Label).string = '下拉刷新'
+        }
+        if (this.layout.startAxis == UISuperAxis.VERTICAL) {
+            this.header.scaleY = event.progress
+        } else {
+            this.header.scaleX = event.progress
+        }
+
+        // event.refresh=true 代表需要刷新数据
+        if (event.refresh) {
+            cc.log("开始异步刷新数据")
+            this.refreshing.active = true
+            // 第一步  模拟刷新数据
+            for (let i = 0; i < this.datas.length; i++) {
+                const data = this.datas[i];
+                this.datas[i].title = `${data.title} - ${i}`
+            }
+            // 模拟异步延迟
+            setTimeout(() => {
+                this.refreshing.active = false
+                // 第二步 刷新
+                cc.log("刷新成功！")
+                this.layout.total(this.datas.length)
+            }, 1000)
+        }
+    }
+    /**
+     * 上拉加载
+     * 核心代码 请看 第一步 第二步 其余的都是一些的效果测试代码 你可以自己实现任何效果
+     */
+    pullUpLoad(scroll: UISpuerScrollView, event: { refresh: boolean, progress: number }) {
+        // 模拟代码 一些UI效果
+        this.footer.opacity = event.progress * 255
+        if (this.layout.startAxis == UISuperAxis.VERTICAL) {
+            this.footer.scaleY = event.progress
+        } else {
+            this.footer.scaleX = event.progress
+        }
+        if (event.progress == 1) {
+            this.footer.getComponentInChildren(cc.Label).string = '松开加载更多'
+        } else {
+            this.footer.getComponentInChildren(cc.Label).string = '上拉加载'
+        }
+
+
+        // event.refresh=true 代表需要加载数据
+        if (event.refresh) {
+            cc.log("开始异步加载10条数据")
+
+            this.loading.active = true
+            // 第一步  模拟增加10条数据
+            for (let i = 0; i < 10; i++) {
+                this.datas.push({
+                    title: `${this.datas.length}`,
+                    randomWidth: 100 * (1 + Math.random()),
+                    randomHeight: 100 * (1 + Math.random()),
+                })
+            }
+            // 模拟异步延迟加载
+            setTimeout(() => {
+                this.loading.active = false
+                // 第二步 刷新
+                cc.log("数据加载成功！")
+                this.layout.total(this.datas.length)
+            }, 1000)
+        }
+    }
+    onRemoveItem(index: number) {
+        // 删除点击的那条数据
+        this.datas.splice(index, 1)
+        // 刷新
+        this.layout.total(this.datas.length)
+    }
+
 }

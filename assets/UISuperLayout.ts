@@ -86,6 +86,8 @@ export default class UISuperLayout extends cc.Component {
     }
     /** 设置最大item数量 */
     public total(value: number): this {
+        this.scrollView.stopAutoScroll()
+        this.scrollView.release()
         this.maxItemTotal = value
         this.moreRemLessAdd()
         let offset = 0

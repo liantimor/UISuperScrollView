@@ -1,74 +1,117 @@
-2020-11-09T18:25:17.392Z - normal: Load ~/.CocosCreator/settings.json
-2020-11-09T18:25:17.436Z - normal: Initializing Asset Database
-2020-11-09T18:25:17.439Z - normal: checking language setting...
-2020-11-09T18:25:17.439Z - normal: Language: zh
-2020-11-09T18:25:18.498Z - success: protocol editor-framework registered
-2020-11-09T18:25:18.499Z - success: protocol app registered
-2020-11-09T18:25:18.499Z - success: protocol theme registered
-2020-11-09T18:25:18.499Z - success: protocol packages registered
-2020-11-09T18:25:18.499Z - success: protocol uuid registerred
-2020-11-09T18:25:18.499Z - success: protocol db registerred
-2020-11-09T18:25:18.499Z - success: protocol thumbnail registerred
-2020-11-09T18:25:18.499Z - success: protocol unpack registerred
-2020-11-09T18:25:18.499Z - success: protocol disable-commonjs registerred
-2020-11-09T18:25:19.768Z - normal: connected!
-2020-11-09T18:25:19.769Z - normal: Check project /Users/weilaijia/Documents/NewProject_1
-2020-11-09T18:25:19.769Z - normal: Initializing project /Users/weilaijia/Documents/NewProject_1
-2020-11-09T18:25:19.934Z - success: adapters loaded
-2020-11-09T18:25:19.936Z - success: asset-db-debugger loaded
-2020-11-09T18:25:19.997Z - success: fb-audience-network loaded
-2020-11-09T18:25:20.035Z - success: fb-live-stream loaded
-2020-11-09T18:25:20.036Z - success: google-play-instant loaded
-2020-11-09T18:25:20.036Z - success: jsb-adapter loaded
-2020-11-09T18:25:20.040Z - success: package-manager loaded
-2020-11-09T18:25:20.041Z - success: runtime-adapters loaded
-2020-11-09T18:25:20.042Z - success: runtime-dev-tools loaded
-2020-11-09T18:25:20.044Z - success: ui-kit-preview-extra loaded
-2020-11-09T18:25:20.047Z - success: ui-kit-preview loaded
-2020-11-09T18:25:20.088Z - success: alipay-minigame loaded
-2020-11-09T18:25:20.094Z - success: assets loaded
-2020-11-09T18:25:20.096Z - success: baidugame-opendata loaded
-2020-11-09T18:25:20.098Z - success: baidugame loaded
-2020-11-09T18:25:20.100Z - success: builder loaded
-2020-11-09T18:25:20.102Z - success: bytedance-opendata loaded
-2020-11-09T18:25:20.104Z - success: bytedance loaded
-2020-11-09T18:25:20.109Z - success: channel-upload-tools loaded
-2020-11-09T18:25:20.114Z - success: cloud-function loaded
-2020-11-09T18:25:20.358Z - success: cocos-services loaded
-2020-11-09T18:25:20.361Z - success: console loaded
-2020-11-09T18:25:20.364Z - success: curve-editor loaded
-2020-11-09T18:25:20.371Z - success: fb-instant-games loaded
-2020-11-09T18:25:20.375Z - success: game-window loaded
-2020-11-09T18:25:20.377Z - success: google-instant-games loaded
-2020-11-09T18:25:20.382Z - success: hierarchy loaded
-2020-11-09T18:25:20.385Z - success: huawei-agc loaded
-2020-11-09T18:25:20.388Z - success: huawei-runtime loaded
-2020-11-09T18:25:20.393Z - success: inspector loaded
-2020-11-09T18:25:20.404Z - success: cpk-publish loaded
-2020-11-09T18:25:20.406Z - success: keystore loaded
-2020-11-09T18:25:20.419Z - success: link-sure-runtime loaded
-2020-11-09T18:25:20.432Z - success: node-library loaded
-2020-11-09T18:25:20.433Z - success: open-recent-items loaded
-2020-11-09T18:25:20.437Z - success: oppo-runtime loaded
-2020-11-09T18:25:20.440Z - success: package-asset loaded
-2020-11-09T18:25:20.442Z - success: preferences loaded
-2020-11-09T18:25:20.445Z - success: project-importer loaded
-2020-11-09T18:25:20.448Z - success: project-settings loaded
-2020-11-09T18:25:20.458Z - success: qtt-runtime loaded
-2020-11-09T18:25:20.462Z - success: scene loaded
-2020-11-09T18:25:20.463Z - success: simulator-debugger loaded
-2020-11-09T18:25:20.464Z - success: sprite-editor loaded
-2020-11-09T18:25:20.508Z - success: store loaded
-2020-11-09T18:25:20.512Z - success: timeline loaded
-2020-11-09T18:25:20.515Z - success: vivo-runtime loaded
-2020-11-09T18:25:20.517Z - success: wechatgame-opendata loaded
-2020-11-09T18:25:20.520Z - success: wechatgame loaded
-2020-11-09T18:25:20.524Z - success: xiaomi-runtime loaded
-2020-11-09T18:25:20.659Z - success: im-plugin loaded
-2020-11-09T18:25:20.660Z - success: preview server running at http://localhost:7456
-2020-11-09T18:25:21.647Z - normal: Initializing Cocos2d
-2020-11-09T18:25:21.883Z - normal: Initializing engine extends
-2020-11-09T18:25:25.469Z - normal: Loading packages
-2020-11-09T18:25:25.471Z - normal: Watching packages
-2020-11-09T18:25:25.588Z - normal: Run Application
-2020-11-09T18:25:26.765Z - info: Cocos Service load base data!
+2020-11-10T13:33:45.514Z - normal: Load ~/.CocosCreator/settings.json
+2020-11-10T13:33:45.560Z - normal: Initializing Asset Database
+2020-11-10T13:33:45.562Z - normal: checking language setting...
+2020-11-10T13:33:45.562Z - normal: Language: zh
+2020-11-10T13:33:46.663Z - success: protocol editor-framework registered
+2020-11-10T13:33:46.664Z - success: protocol app registered
+2020-11-10T13:33:46.664Z - success: protocol theme registered
+2020-11-10T13:33:46.664Z - success: protocol packages registered
+2020-11-10T13:33:46.664Z - success: protocol uuid registerred
+2020-11-10T13:33:46.664Z - success: protocol db registerred
+2020-11-10T13:33:46.664Z - success: protocol thumbnail registerred
+2020-11-10T13:33:46.664Z - success: protocol unpack registerred
+2020-11-10T13:33:46.664Z - success: protocol disable-commonjs registerred
+2020-11-10T13:33:47.906Z - normal: connected!
+2020-11-10T13:33:47.907Z - normal: Check project /Users/weilaijia/Documents/NewProject_1
+2020-11-10T13:33:47.908Z - normal: Initializing project /Users/weilaijia/Documents/NewProject_1
+2020-11-10T13:33:48.073Z - success: adapters loaded
+2020-11-10T13:33:48.075Z - success: asset-db-debugger loaded
+2020-11-10T13:33:48.142Z - success: fb-audience-network loaded
+2020-11-10T13:33:48.191Z - success: fb-live-stream loaded
+2020-11-10T13:33:48.192Z - success: google-play-instant loaded
+2020-11-10T13:33:48.193Z - success: jsb-adapter loaded
+2020-11-10T13:33:48.196Z - success: package-manager loaded
+2020-11-10T13:33:48.197Z - success: runtime-adapters loaded
+2020-11-10T13:33:48.199Z - success: runtime-dev-tools loaded
+2020-11-10T13:33:48.201Z - success: ui-kit-preview-extra loaded
+2020-11-10T13:33:48.203Z - success: ui-kit-preview loaded
+2020-11-10T13:33:48.250Z - success: alipay-minigame loaded
+2020-11-10T13:33:48.258Z - success: assets loaded
+2020-11-10T13:33:48.260Z - success: baidugame-opendata loaded
+2020-11-10T13:33:48.263Z - success: baidugame loaded
+2020-11-10T13:33:48.266Z - success: builder loaded
+2020-11-10T13:33:48.268Z - success: bytedance-opendata loaded
+2020-11-10T13:33:48.271Z - success: bytedance loaded
+2020-11-10T13:33:48.275Z - success: channel-upload-tools loaded
+2020-11-10T13:33:48.283Z - success: cloud-function loaded
+2020-11-10T13:33:48.499Z - success: cocos-services loaded
+2020-11-10T13:33:48.502Z - success: console loaded
+2020-11-10T13:33:48.504Z - success: curve-editor loaded
+2020-11-10T13:33:48.511Z - success: fb-instant-games loaded
+2020-11-10T13:33:48.515Z - success: game-window loaded
+2020-11-10T13:33:48.516Z - success: google-instant-games loaded
+2020-11-10T13:33:48.520Z - success: hierarchy loaded
+2020-11-10T13:33:48.522Z - success: huawei-agc loaded
+2020-11-10T13:33:48.524Z - success: huawei-runtime loaded
+2020-11-10T13:33:48.528Z - success: inspector loaded
+2020-11-10T13:33:48.540Z - success: cpk-publish loaded
+2020-11-10T13:33:48.541Z - success: keystore loaded
+2020-11-10T13:33:48.555Z - success: link-sure-runtime loaded
+2020-11-10T13:33:48.565Z - success: node-library loaded
+2020-11-10T13:33:48.567Z - success: open-recent-items loaded
+2020-11-10T13:33:48.569Z - success: oppo-runtime loaded
+2020-11-10T13:33:48.571Z - success: package-asset loaded
+2020-11-10T13:33:48.572Z - success: preferences loaded
+2020-11-10T13:33:48.575Z - success: project-importer loaded
+2020-11-10T13:33:48.578Z - success: project-settings loaded
+2020-11-10T13:33:48.589Z - success: qtt-runtime loaded
+2020-11-10T13:33:48.593Z - success: scene loaded
+2020-11-10T13:33:48.594Z - success: simulator-debugger loaded
+2020-11-10T13:33:48.595Z - success: sprite-editor loaded
+2020-11-10T13:33:48.635Z - success: store loaded
+2020-11-10T13:33:48.639Z - success: timeline loaded
+2020-11-10T13:33:48.642Z - success: vivo-runtime loaded
+2020-11-10T13:33:48.643Z - success: wechatgame-opendata loaded
+2020-11-10T13:33:48.648Z - success: wechatgame loaded
+2020-11-10T13:33:48.650Z - success: xiaomi-runtime loaded
+2020-11-10T13:33:48.768Z - success: im-plugin loaded
+2020-11-10T13:33:48.769Z - success: preview server running at http://localhost:7456
+2020-11-10T13:33:49.732Z - normal: Initializing Cocos2d
+2020-11-10T13:33:49.986Z - normal: Initializing engine extends
+2020-11-10T13:33:52.843Z - normal: Loading packages
+2020-11-10T13:33:52.845Z - normal: Watching packages
+2020-11-10T13:33:52.972Z - normal: Run Application
+2020-11-10T13:33:55.417Z - info: Cocos Service load base data!
+2020-11-10T15:58:05.748Z - error: Error: Parsing file /Users/weilaijia/Documents/NewProject_1/temp/quick-scripts/src/assets/UISuperScrollView.js: Assigning to rvalue (241:36)
+    at Deps.parseDeps (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:481:28)
+    at getDeps (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:414:40)
+    at /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/module-deps/index.js:398:32
+    at ConcatStream.<anonymous> (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/index.js:36:43)
+    at ConcatStream.emit (events.js:199:15)
+    at ConcatStream.EventEmitter.emit (domain.js:469:20)
+    at finishMaybe (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:475:14)
+    at endWritable (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:485:3)
+    at ConcatStream.Writable.end (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/concat-stream/node_modules/readable-stream/lib/_stream_writable.js:455:41)
+    at DestroyableTransform.onend (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/node_modules/readable-stream/lib/_stream_readable.js:577:10)
+    at m._parseEntry (/Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/app/editor/share/quick-compile/index.js:212:20)
+    at processTicksAndRejections (internal/process/task_queues.js:86:5)
+2020-11-10T15:58:06.082Z - failed: load script [./UISuperScrollView] failed : /Users/weilaijia/Documents/NewProject_1/temp/quick-scripts/dst/assets/UISuperScrollView.js:241
+                this.isLockHeader = true
+                                    ^^^^
+
+ReferenceError: Invalid left-hand side in assignment
+    at new Script (vm.js:85:7)
+    at createScript (vm.js:266:10)
+    at Object.runInThisContext (vm.js:314:10)
+    at Module._compile (internal/modules/cjs/loader.js:766:26)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:851:10)
+    at Module.load (internal/modules/cjs/loader.js:701:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:633:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:625:3)
+    at Module.require (internal/modules/cjs/loader.js:739:19)
+    at require (internal/modules/cjs/helpers.js:14:16)
+2020-11-10T15:58:06.083Z - failed: load script [./assets/UISuperScrollView] failed : /Users/weilaijia/Documents/NewProject_1/temp/quick-scripts/dst/assets/UISuperScrollView.js:241
+                this.isLockHeader = true
+                                    ^^^^
+
+ReferenceError: Invalid left-hand side in assignment
+    at new Script (vm.js:85:7)
+    at createScript (vm.js:266:10)
+    at Object.runInThisContext (vm.js:314:10)
+    at Module._compile (internal/modules/cjs/loader.js:766:26)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:851:10)
+    at Module.load (internal/modules/cjs/loader.js:701:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:633:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:625:3)
+    at Module.require (internal/modules/cjs/loader.js:739:19)
+    at require (internal/modules/cjs/helpers.js:14:16)

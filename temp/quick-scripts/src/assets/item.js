@@ -31,8 +31,13 @@ var item = /** @class */ (function (_super) {
         _this.label = null;
         return _this;
     }
-    item.prototype.show = function (info) {
+    item.prototype.show = function (info, index, removeFunc) {
         this.label.string = "" + info.title;
+        this.index = index;
+        this.removeFunc = removeFunc;
+    };
+    item.prototype.onRemMe = function () {
+        this.removeFunc(this.index);
     };
     __decorate([
         property(cc.Label)
