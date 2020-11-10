@@ -169,25 +169,15 @@ export default class UISpuerScrollView extends cc.ScrollView {
         if (this.isCalculPull) {
             if (this.isMoveHeader && !this.isLockHeader) {
                 this.isLockHeader = true
-
                 this.vertical && (deltaMove.y -= this.headerHeight)
                 this.horizontal && (deltaMove.x += this.headerHeight)
-
-                cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, {
-                    refresh: true,
-                    progress: 1
-                })
+                this.emitPullDownEvent({ refresh: true, progress: 1 })
             }
             if (this.isMoveFooter && !this.isLockFooter) {
                 this.isLockFooter = true
-
                 this.vertical && (deltaMove.y += this.footerHeight)
                 this.horizontal && (deltaMove.x -= this.footerHeight)
-
-                cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, {
-                    refresh: true,
-                    progress: 1
-                })
+                this.emitPullUpEvent({ refresh: true, progress: 1 })
             }
         }
         super['_startAutoScroll'](deltaMove, timeInSecond, attenuated)
@@ -212,20 +202,13 @@ export default class UISpuerScrollView extends cc.ScrollView {
 
         let offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x
         if (offset > 0 && this.isHeader && !this.isLockHeader) {
-
             let progress = Math.min(offset / this.headerOutOffset, 1)
-
             this.emitPullDownEvent({ refresh: false, progress: progress })
-
         } else if (offset < 0 && this.isFooter && !this.isLockFooter) {
-
             let progress = Math.min(-offset / this.footerOutOffset, 1)
-
             this.emitPullUpEvent({ refresh: false, progress: progress })
-
         } else {
             this.emitPullDownEvent({ refresh: false, progress: 0 })
-
             this.emitPullUpEvent({ refresh: false, progress: 0 })
         }
     }
