@@ -210,19 +210,13 @@ var UISpuerScrollView = /** @class */ (function (_super) {
                 this.isLockHeader = true;
                 this.vertical && (deltaMove.y -= this.headerHeight);
                 this.horizontal && (deltaMove.x += this.headerHeight);
-                cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, {
-                    refresh: true,
-                    progress: 1
-                });
+                this.emitPullDownEvent({ refresh: true, progress: 1 });
             }
             if (this.isMoveFooter && !this.isLockFooter) {
                 this.isLockFooter = true;
                 this.vertical && (deltaMove.y += this.footerHeight);
                 this.horizontal && (deltaMove.x -= this.footerHeight);
-                cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, {
-                    refresh: true,
-                    progress: 1
-                });
+                this.emitPullUpEvent({ refresh: true, progress: 1 });
             }
         }
         _super.prototype['_startAutoScroll'].call(this, deltaMove, timeInSecond, attenuated);

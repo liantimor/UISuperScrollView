@@ -1,6 +1,6 @@
 
 (function () {
-var scripts = [{"deps":{"./assets/testPanel":2,"./assets/UISuperScrollView":3,"./assets/UISuperLayout":5,"./assets/item":1,"./assets/UISuperItem":4},"path":"preview-scripts/__qc_index__.js"},{"deps":{},"path":"preview-scripts/assets/item.js"},{"deps":{"./item":1,"./UISuperLayout":5},"path":"preview-scripts/assets/testPanel.js"},{"deps":{"./UISuperLayout":5},"path":"preview-scripts/assets/UISuperScrollView.js"},{"deps":{"./UISuperLayout":5},"path":"preview-scripts/assets/UISuperItem.js"},{"deps":{"./UISuperItem":4,"./UISuperScrollView":3},"path":"preview-scripts/assets/UISuperLayout.js"}];
+var scripts = [{"deps":{"./assets/item":1,"./assets/UISuperLayout":3,"./assets/testPanel":2,"./assets/UISuperScrollView":4,"./assets/UISuperItem":5},"path":"preview-scripts/__qc_index__.js"},{"deps":{},"path":"preview-scripts/assets/item.js"},{"deps":{"./item":1,"./UISuperLayout":3},"path":"preview-scripts/assets/testPanel.js"},{"deps":{"./UISuperScrollView":4,"./UISuperItem":5},"path":"preview-scripts/assets/UISuperLayout.js"},{"deps":{"./UISuperLayout":3},"path":"preview-scripts/assets/UISuperScrollView.js"},{"deps":{"./UISuperLayout":3},"path":"preview-scripts/assets/UISuperItem.js"}];
 var entries = ["preview-scripts/__qc_index__.js"];
 var bundleScript = 'preview-scripts/__qc_bundle__.js';
 

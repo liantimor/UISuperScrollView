@@ -1488,7 +1488,7 @@
     "inertia": true,
     "brake": 0.5,
     "elastic": true,
-    "bounceDuration": 0.25,
+    "bounceDuration": 0.5,
     "scrollEvents": [],
     "cancelInnerEvents": true,
     "_N$content": {
