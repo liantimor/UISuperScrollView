@@ -95,7 +95,6 @@ var testPanel = /** @class */ (function (_super) {
         this.isRandomWidth = !this.isRandomWidth;
         this.toHeader();
     };
-    // 
     /**
     * 下拉刷新
     * 核心代码 请看 第一步 第二步 其余的都是一些的效果测试代码 你可以自己实现任何效果
@@ -103,19 +102,7 @@ var testPanel = /** @class */ (function (_super) {
     testPanel.prototype.pullDownRefresh = function (scroll, event) {
         var _this = this;
         // 模拟代码  一些UI效果
-        this.header.opacity = event.progress * 255;
-        if (event.progress == 1) {
-            this.header.getComponentInChildren(cc.Label).string = '松开刷新';
-        }
-        else {
-            this.header.getComponentInChildren(cc.Label).string = '下拉刷新';
-        }
-        if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
-            this.header.scaleY = event.progress;
-        }
-        else {
-            this.header.scaleX = event.progress;
-        }
+        this.playAnim(this.header, event, '松开刷新哦', '继续滑');
         // event.refresh=true 代表需要刷新数据
         if (event.refresh) {
             cc.log("开始异步刷新数据");
@@ -141,19 +128,7 @@ var testPanel = /** @class */ (function (_super) {
     testPanel.prototype.pullUpLoad = function (scroll, event) {
         var _this = this;
         // 模拟代码 一些UI效果
-        this.footer.opacity = event.progress * 255;
-        if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
-            this.footer.scaleY = event.progress;
-        }
-        else {
-            this.footer.scaleX = event.progress;
-        }
-        if (event.progress == 1) {
-            this.footer.getComponentInChildren(cc.Label).string = '松开加载更多';
-        }
-        else {
-            this.footer.getComponentInChildren(cc.Label).string = '上拉加载';
-        }
+        this.playAnim(this.footer, event, '松开加载更多', '继续滑');
         // event.refresh=true 代表需要加载数据
         if (event.refresh) {
             cc.log("开始异步加载10条数据");
@@ -180,6 +155,28 @@ var testPanel = /** @class */ (function (_super) {
         this.datas.splice(index, 1);
         // 刷新
         this.layout.total(this.datas.length);
+    };
+    /** 测试代码 */
+    testPanel.prototype.playAnim = function (node, event, msg1, msg2) {
+        node.opacity = event.progress * 255;
+        var scale = this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL ? cc.v2(1, event.progress) : cc.v2(event.progress, 1);
+        if (event.progress >= 1) {
+            node.getComponentInChildren(cc.Label).string = msg1;
+        }
+        else {
+            node.getComponentInChildren(cc.Label).string = msg2;
+        }
+        if (event.progress >= 1.3) {
+            if (!node['playing']) {
+                node.runAction(cc.scaleTo(0.618, 1, 1).easing(cc.easeElasticOut(0.236)));
+                node['playing'] = true;
+            }
+        }
+        else {
+            node.stopAllActions();
+            node['playing'] = false;
+            node.setScale(scale);
+        }
     };
     __decorate([
         property(UISuperLayout_1.default)

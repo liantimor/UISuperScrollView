@@ -139,6 +139,7 @@ var UISpuerItem = /** @class */ (function (_super) {
             }
         }
     };
+    // 设置自己相对于上一个兄弟节点的位置
     UISpuerItem.prototype.watchBrother = function () {
         var prevIndex = this.node.getSiblingIndex() - 1;
         var prevNode = this.node.parent.children[prevIndex];

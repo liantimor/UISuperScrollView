@@ -71,24 +71,14 @@ export default class testPanel extends cc.Component {
         this.isRandomWidth = !this.isRandomWidth
         this.toHeader()
     }
-    // 
     /**
     * 下拉刷新
     * 核心代码 请看 第一步 第二步 其余的都是一些的效果测试代码 你可以自己实现任何效果
     */
+
     pullDownRefresh(scroll: UISpuerScrollView, event: { refresh: boolean, progress: number }) {
         // 模拟代码  一些UI效果
-        this.header.opacity = event.progress * 255
-        if (event.progress == 1) {
-            this.header.getComponentInChildren(cc.Label).string = '松开刷新'
-        } else {
-            this.header.getComponentInChildren(cc.Label).string = '下拉刷新'
-        }
-        if (this.layout.startAxis == UISuperAxis.VERTICAL) {
-            this.header.scaleY = event.progress
-        } else {
-            this.header.scaleX = event.progress
-        }
+        this.playAnim(this.header, event, '松开刷新哦', '继续滑')
 
         // event.refresh=true 代表需要刷新数据
         if (event.refresh) {
@@ -114,18 +104,7 @@ export default class testPanel extends cc.Component {
      */
     pullUpLoad(scroll: UISpuerScrollView, event: { refresh: boolean, progress: number }) {
         // 模拟代码 一些UI效果
-        this.footer.opacity = event.progress * 255
-        if (this.layout.startAxis == UISuperAxis.VERTICAL) {
-            this.footer.scaleY = event.progress
-        } else {
-            this.footer.scaleX = event.progress
-        }
-        if (event.progress == 1) {
-            this.footer.getComponentInChildren(cc.Label).string = '松开加载更多'
-        } else {
-            this.footer.getComponentInChildren(cc.Label).string = '上拉加载'
-        }
-
+        this.playAnim(this.footer, event, '松开加载更多', '继续滑')
 
         // event.refresh=true 代表需要加载数据
         if (event.refresh) {
@@ -154,6 +133,27 @@ export default class testPanel extends cc.Component {
         this.datas.splice(index, 1)
         // 刷新
         this.layout.total(this.datas.length)
+    }
+
+    /** 测试代码 */
+    private playAnim(node: cc.Node, event: { refresh: boolean, progress: number }, msg1: string, msg2: string) {
+        node.opacity = event.progress * 255
+        let scale = this.layout.startAxis == UISuperAxis.VERTICAL ? cc.v2(1, event.progress) : cc.v2(event.progress, 1)
+        if (event.progress >= 1) {
+            node.getComponentInChildren(cc.Label).string = msg1
+        } else {
+            node.getComponentInChildren(cc.Label).string = msg2
+        }
+        if (event.progress >= 1.3) {
+            if (!node['playing']) {
+                node.runAction(cc.scaleTo(0.618, 1, 1).easing(cc.easeElasticOut(0.236)))
+                node['playing'] = true
+            }
+        } else {
+            node.stopAllActions()
+            node['playing'] = false
+            node.setScale(scale)
+        }
     }
 
 }

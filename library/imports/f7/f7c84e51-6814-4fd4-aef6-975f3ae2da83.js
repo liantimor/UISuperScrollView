@@ -29,6 +29,7 @@ var item = /** @class */ (function (_super) {
     function item() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.label = null;
+        _this.isChange = false;
         return _this;
     }
     item.prototype.show = function (info, index, removeFunc) {
@@ -38,6 +39,15 @@ var item = /** @class */ (function (_super) {
     };
     item.prototype.onRemMe = function () {
         this.removeFunc(this.index);
+    };
+    item.prototype.onClick = function () {
+        this.isChange = !this.isChange;
+        if (this.isChange) {
+            this.node.height *= 10;
+        }
+        else {
+            this.node.height /= 10;
+        }
     };
     __decorate([
         property(cc.Label)

@@ -10,6 +10,7 @@ export default class UISpuerItem extends cc.Component {
     onLoad() {
         this.node['getBounding'] = this.getBounding.bind(this)
     }
+   
     public init(layout: UISuperLayout, refreshItemCallback: Function, isOutOfBoundaryTop: Function, isOutOfBoundaryBottom: Function) {
         this.layout = layout
         this.refreshItemCallback = refreshItemCallback
@@ -92,6 +93,7 @@ export default class UISpuerItem extends cc.Component {
             }
         }
     }
+    // 设置自己相对于上一个兄弟节点的位置
     private watchBrother() {
         let prevIndex = this.node.getSiblingIndex() - 1
         let prevNode = this.node.parent.children[prevIndex]

@@ -98,6 +98,7 @@ var UISuperLayout = /** @class */ (function (_super) {
     };
     UISuperLayout.prototype.onLoad = function () {
         this.node.getContentSize = this.getContentSize.bind(this);
+        this.node.on(cc.Node.EventType.CHILD_REORDER, this.listenFooter, this);
     };
     UISuperLayout.prototype.getUsedScaleValue = function (value) {
         return this.affectedByScale ? Math.abs(value) : 1;
@@ -139,8 +140,19 @@ var UISuperLayout = /** @class */ (function (_super) {
             this.scrollToRight(timeInSecond, attenuated);
         }
     };
-    UISuperLayout.prototype.resetScrollView = function () {
-        this.scrollView.autoScrolling = true;
+    UISuperLayout.prototype.listenFooter = function () {
+        this.header.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
+        this.header.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
+        this.header.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
+        this.footer.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
+        this.footer.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
+        this.footer.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
+        this.footer.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
+        this.footer.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
+        this.footer.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
+    };
+    UISuperLayout.prototype.resetScrollView = function (event) {
+        this.scrollView.reset();
     };
     UISuperLayout.prototype.scrollToTop = function (timeInSecond, attenuated) {
         if (this.startAxis != UISuperAxis.VERTICAL)

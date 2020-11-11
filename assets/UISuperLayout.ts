@@ -80,6 +80,7 @@ export default class UISuperLayout extends cc.Component {
 
     onLoad() {
         this.node.getContentSize = this.getContentSize.bind(this)
+        this.node.on(cc.Node.EventType.CHILD_REORDER, this.listenFooter, this)
     }
     public getUsedScaleValue(value: number) {
         return this.affectedByScale ? Math.abs(value) : 1;
@@ -119,8 +120,21 @@ export default class UISuperLayout extends cc.Component {
             this.scrollToRight(timeInSecond, attenuated)
         }
     }
-    public resetScrollView() {
-        this.scrollView.autoScrolling = true
+    private listenFooter() {
+        this.header.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
+        this.header.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
+        this.header.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
+
+        this.footer.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
+        this.footer.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
+        this.footer.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
+        
+        this.footer.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
+        this.footer.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
+        this.footer.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
+    }
+    public resetScrollView(event: any) {
+        this.scrollView.reset()
     }
     private scrollToTop(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.VERTICAL) return

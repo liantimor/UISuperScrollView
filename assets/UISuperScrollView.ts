@@ -1,5 +1,6 @@
 import UISuperLayout from './UISuperLayout';
 const { ccclass, property } = cc._decorator;
+const EPSILON = 1e-4;
 @ccclass
 export default class UISpuerScrollView extends cc.ScrollView {
     @property({
@@ -37,7 +38,8 @@ export default class UISpuerScrollView extends cc.ScrollView {
     private isMoveFooter: boolean = false
     private isLockHeader: boolean = false
     private isLockFooter: boolean = false
-    private isAutoBack: boolean
+    private isAutoBack: boolean = false
+    private isEmitProgress: boolean = false
     private _layout: UISuperLayout = null
     private get layout(): UISuperLayout {
         if (this._layout == null) {
@@ -67,7 +69,20 @@ export default class UISpuerScrollView extends cc.ScrollView {
             this.isMoveFooter = false
             this.isLockHeader = false
             this.isLockFooter = false
+            this.isEmitProgress = true
             this['_outOfBoundaryAmountDirty'] = true
+            this['_processInertiaScroll']()
+        }
+    }
+    /**
+     * 重置列表
+     * 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(高度|缩放|尺寸) 时保证内容显示正确
+     */
+    public reset() {
+        this['_outOfBoundaryAmountDirty'] = true
+        let offset = this.getHowMuchOutOfBoundary()
+        if (!offset.fuzzyEquals(cc.v2(0, 0), EPSILON)) {
+            this.isEmitProgress = false
             this['_processInertiaScroll']()
         }
     }
@@ -80,6 +95,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
         this.isAutoBack = false
         // 判断是否需要计算
         if (this.isCalculPull) {
+            this.isEmitProgress = true
             let outOfBoundary = this.getHowMuchOutOfBoundary()
             let offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x
             if (offset > 0 && this.isHeader) {
@@ -88,7 +104,6 @@ export default class UISpuerScrollView extends cc.ScrollView {
                 this.isMoveFooter = offset <= -this.footerOutOffset
             }
         }
-
     }
     private _dispatchEvent(event) {
         super['_dispatchEvent'](event)
@@ -97,6 +112,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
             this.isMoveHeader = false
             this.isMoveFooter = false
             this.isAutoBack = false
+            this.isEmitProgress = false
         }
     }
     private _getContentTopBoundary() {
@@ -202,10 +218,12 @@ export default class UISpuerScrollView extends cc.ScrollView {
 
         let offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x
         if (offset > 0 && this.isHeader && !this.isLockHeader) {
-            let progress = Math.min(offset / this.headerOutOffset, 1)
+            // let progress = Math.min(offset / this.headerOutOffset, 1)
+            let progress = offset / this.headerOutOffset
             this.emitPullDownEvent({ refresh: false, progress: progress })
         } else if (offset < 0 && this.isFooter && !this.isLockFooter) {
-            let progress = Math.min(-offset / this.footerOutOffset, 1)
+            // let progress = Math.min(-offset / this.footerOutOffset, 1)
+            let progress = -offset / this.footerOutOffset
             this.emitPullUpEvent({ refresh: false, progress: progress })
         } else {
             this.emitPullDownEvent({ refresh: false, progress: 0 })
@@ -214,9 +232,14 @@ export default class UISpuerScrollView extends cc.ScrollView {
     }
 
     private emitPullDownEvent(data: any) {
-        cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, data)
+        if(this.isEmitProgress){
+            cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, data)
+        }
     }
     private emitPullUpEvent(data: any) {
-        cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, data)
+        if (this.isEmitProgress) {
+            cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, data)
+        }
     }
+
 }

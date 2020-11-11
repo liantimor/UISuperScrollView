@@ -25,6 +25,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var UISuperLayout_1 = require("./UISuperLayout");
 var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property;
+var EPSILON = 1e-4;
 var UISpuerScrollView = /** @class */ (function (_super) {
     __extends(UISpuerScrollView, _super);
     function UISpuerScrollView() {
@@ -40,6 +41,8 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         _this.isMoveFooter = false;
         _this.isLockHeader = false;
         _this.isLockFooter = false;
+        _this.isAutoBack = false;
+        _this.isEmitProgress = false;
         _this._layout = null;
         return _this;
     }
@@ -100,7 +103,20 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             this.isMoveFooter = false;
             this.isLockHeader = false;
             this.isLockFooter = false;
+            this.isEmitProgress = true;
             this['_outOfBoundaryAmountDirty'] = true;
+            this['_processInertiaScroll']();
+        }
+    };
+    /**
+     * 重置列表
+     * 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(高度|缩放|尺寸) 时保证内容显示正确
+     */
+    UISpuerScrollView.prototype.reset = function () {
+        this['_outOfBoundaryAmountDirty'] = true;
+        var offset = this.getHowMuchOutOfBoundary();
+        if (!offset.fuzzyEquals(cc.v2(0, 0), EPSILON)) {
+            this.isEmitProgress = false;
             this['_processInertiaScroll']();
         }
     };
@@ -113,6 +129,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         this.isAutoBack = false;
         // 判断是否需要计算
         if (this.isCalculPull) {
+            this.isEmitProgress = true;
             var outOfBoundary = this.getHowMuchOutOfBoundary();
             var offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x;
             if (offset > 0 && this.isHeader) {
@@ -130,6 +147,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             this.isMoveHeader = false;
             this.isMoveFooter = false;
             this.isAutoBack = false;
+            this.isEmitProgress = false;
         }
     };
     UISpuerScrollView.prototype._getContentTopBoundary = function () {
@@ -242,11 +260,13 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             return;
         var offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x;
         if (offset > 0 && this.isHeader && !this.isLockHeader) {
-            var progress = Math.min(offset / this.headerOutOffset, 1);
+            // let progress = Math.min(offset / this.headerOutOffset, 1)
+            var progress = offset / this.headerOutOffset;
             this.emitPullDownEvent({ refresh: false, progress: progress });
         }
         else if (offset < 0 && this.isFooter && !this.isLockFooter) {
-            var progress = Math.min(-offset / this.footerOutOffset, 1);
+            // let progress = Math.min(-offset / this.footerOutOffset, 1)
+            var progress = -offset / this.footerOutOffset;
             this.emitPullUpEvent({ refresh: false, progress: progress });
         }
         else {
@@ -255,10 +275,14 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         }
     };
     UISpuerScrollView.prototype.emitPullDownEvent = function (data) {
-        cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, data);
+        if (this.isEmitProgress) {
+            cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, data);
+        }
     };
     UISpuerScrollView.prototype.emitPullUpEvent = function (data) {
-        cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, data);
+        if (this.isEmitProgress) {
+            cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, data);
+        }
     };
     __decorate([
         property({

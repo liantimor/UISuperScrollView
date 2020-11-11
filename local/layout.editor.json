@@ -18,7 +18,7 @@
                 "children": [
                   "hierarchy"
                 ],
-                "height": 425.6875,
+                "height": 426,
                 "type": "panel",
                 "width": 609
               },
@@ -28,7 +28,7 @@
                   "assets",
                   "cloud-function"
                 ],
-                "height": 820.3125,
+                "height": 819.984375,
                 "type": "panel",
                 "width": 609
               }
@@ -45,7 +45,7 @@
                   "scene",
                   "node-library"
                 ],
-                "height": 657.578125,
+                "height": 658,
                 "type": "panel",
                 "width": 1336
               },
@@ -56,7 +56,7 @@
                   "timeline",
                   "game-window"
                 ],
-                "height": 588.421875,
+                "height": 588,
                 "type": "panel",
                 "width": 1336
               }
