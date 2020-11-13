@@ -1,5 +1,5 @@
 # UISuperScrollView
-查看完整效果 https://www.jianshu.com/p/0a00c5585c75
+演示效果 https://icipiqkm.github.io/UISuperScrollView/
 
 针对CocosCreator ScrollView做的优化 
 
