@@ -38,11 +38,15 @@ export default class UISuperLayout extends cc.Component {
     @property({
         displayName: "使用item子节点包围盒"
     }) childBoundingBox: boolean = false
-
     @property(cc.Component.EventHandler) refreshItemEvents: cc.Component.EventHandler[] = []
-
     public maxItemTotal: number = 0
-
+    private _viewSize: cc.Size
+    public get viewSize(): cc.Size {
+        if (!this._viewSize) {
+            this._viewSize = this.scrollView.view.getContentSize()
+        }
+        return this._viewSize
+    }
     private _scrollView: UISpuerScrollView = null
     public get scrollView(): UISpuerScrollView {
         if (!this._scrollView) {
@@ -58,29 +62,41 @@ export default class UISuperLayout extends cc.Component {
     public get footer(): cc.Node {
         return this.node.children[this.node.childrenCount - 1]
     }
+    public get headerBoundaryX() {
+        return this.node.x + this.header.x - this.header.anchorX * this.header.width
+    }
+    public get headerBoundaryY() {
+        return this.node.y + this.header.y + (1 - this.header.anchorY) * this.header.height
+    }
+    public get footerBoundaryX() {
+        return this.node.x + this.footer.x + (1 - this.footer.anchorX) * this.footer.width
+    }
+    public get footerBoundaryY() {
+        return this.node.y + this.footer.y - this.footer.anchorY * this.footer.height
+    }
     // 重写
     public getContentSize() {
-        if (!this.header || !this.footer) return this.scrollView.view.getContentSize()
-        let size = cc.Size.ZERO
-        let _header, _footer
-        if (this.childBoundingBox) {
-            // 该边框包含自身和已激活的子节点的世界边框 (注意！使用此方法时 底层代码会遍历所有子节点 并包含所有子节点的世界边框 子节点越多性能越差)
-            _header = this.node.convertToWorldSpaceAR(cc.v2(this.header.getBoundingBoxToWorld().xMin, this.header.getBoundingBoxToWorld().yMax))
-            _footer = this.node.convertToWorldSpaceAR(cc.v2(this.footer.getBoundingBoxToWorld().xMax, this.footer.getBoundingBoxToWorld().yMin))
-        } else {
-            // 该边框包含自身的世界边框 (这里主要是修改getBoundingBoxToWorld代码 去掉遍历子节点的代码)
-            // 这里只需要计算item本身的世界边框即可 (性能最优)
-            _header = this.node.convertToWorldSpaceAR(cc.v2(this.header['getBounding']().xMin, this.header['getBounding']().yMax))
-            _footer = this.node.convertToWorldSpaceAR(cc.v2(this.footer['getBounding']().xMax, this.footer['getBounding']().yMin))
+        let size = this.getReallySize()
+        let viewSize = this.scrollView.view.getContentSize()
+        if (size.height < viewSize.height) {
+            size.height = viewSize.height
         }
-        size.width = _footer.x - _header.x + this.paddingLeft + this.paddingRight
-        size.height = _header.y - _footer.y + this.paddingTop + this.paddingBottom
+        if (size.width < viewSize.width) {
+            size.width = viewSize.width
+        }
         return size
     }
-
+    public getReallySize() {
+        if (this.node.childrenCount == 0) {
+            return this.viewSize
+        }
+        let size = cc.Size.ZERO
+        size.width = this.footerBoundaryX + -this.headerBoundaryX + this.paddingLeft + this.paddingRight
+        size.height = this.headerBoundaryY + -this.footerBoundaryY + this.paddingTop + this.paddingBottom
+        return size
+    }
     onLoad() {
         this.node.getContentSize = this.getContentSize.bind(this)
-        this.node.on(cc.Node.EventType.CHILD_REORDER, this.listenFooter, this)
     }
     public getUsedScaleValue(value: number) {
         return this.affectedByScale ? Math.abs(value) : 1;
@@ -104,6 +120,7 @@ export default class UISuperLayout extends cc.Component {
         this.scrollView.calculateBoundary()
         return this
     }
+
     /** 滚动到头部 */
     public scrollToHeader(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis == UISuperAxis.VERTICAL) {
@@ -120,55 +137,47 @@ export default class UISuperLayout extends cc.Component {
             this.scrollToRight(timeInSecond, attenuated)
         }
     }
-    private listenFooter() {
-        this.header.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
-        this.header.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
-        this.header.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
-
-        this.footer.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
-        this.footer.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
-        this.footer.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
-        
-        this.footer.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
-        this.footer.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
-        this.footer.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
-    }
-    public resetScrollView(event: any) {
+    public resetScrollView() {
         this.scrollView.reset()
     }
+    public isOutOfBoundaryHeader(node: cc.Node) {
+        let width = node.width * this.getUsedScaleValue(node.scaleX) * 2
+        let height = -node.height * this.getUsedScaleValue(node.scaleY) * 2
+        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
+        return offset
+    }
+    public isOutOfBoundaryFooter(node: cc.Node) {
+        let width = -node.width * this.getUsedScaleValue(node.scaleX) * 2
+        let height = node.height * this.getUsedScaleValue(node.scaleY) * 2
+        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
+        return offset
+    }
+
     private scrollToTop(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.VERTICAL) return
-        this.refreshStart()
+        this.refreshHeader()
         this.scrollView.deltaMove = cc.v2(0, -1)
         this.scrollView.scrollToTop(timeInSecond, attenuated)
     }
     private scrollToBottom(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.VERTICAL) return
-        this.refreshEnd()
+        this.refreshFooter()
         this.scrollView.deltaMove = cc.v2(0, 1)
-        /**
-         * item尺寸不一致时 item会在当前帧重置位置 然后在下一帧滚动计算 (这里具体延迟多少帧不确定，因为也许item更新尺寸是异步的，这里不去考虑)
-         * 默认只是认为当前帧会更新完所有item尺寸
-         */
-        this.scheduleOnce(() => this.scrollView.scrollToBottom(timeInSecond, attenuated))
+        this.scrollView.scrollToBottom(timeInSecond, attenuated)
     }
     private scrollToLeft(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.HORIZONTAL) return
-        this.refreshStart()
+        this.refreshHeader()
         this.scrollView.deltaMove = cc.v2(1, 0)
         this.scrollView.scrollToLeft(timeInSecond, attenuated)
     }
     private scrollToRight(timeInSecond?: number, attenuated?: boolean) {
         if (this.startAxis != UISuperAxis.HORIZONTAL) return
-        this.refreshEnd()
+        this.refreshFooter()
         this.scrollView.deltaMove = cc.v2(-1, 0)
-        /**
-         * item尺寸不一致时 item会在当前帧重置位置 然后在下一帧滚动计算 (这里具体延迟多少帧不确定，因为也许item更新尺寸是异步的，这里不去考虑)
-         * 默认只是认为当前帧会更新完所有item尺寸
-         */
-        this.scheduleOnce(() => this.scrollView.scrollToRight(timeInSecond, attenuated))
+        this.scrollView.scrollToRight(timeInSecond, attenuated)
     }
-    private refreshStart() {
+    private refreshHeader() {
         this.scrollView.stopAutoScroll()
         for (let i = 0; i < this.node.children.length; i++) {
             const child = this.node.children[i];
@@ -176,10 +185,9 @@ export default class UISuperLayout extends cc.Component {
             this.refreshItem(child, i)
         }
     }
-    private refreshEnd() {
+    private refreshFooter() {
         this.scrollView.stopAutoScroll()
         let index = this.maxItemTotal
-        // 上监听下
         for (let i = this.node.childrenCount - 1; i >= 0; i--) {
             var child = this.node.children[i]
             child['index'] = --index
@@ -195,9 +203,9 @@ export default class UISuperLayout extends cc.Component {
                 let child = cc.instantiate(this.prefab)
                 child['index'] = i
                 let script = child.getComponent(UISpuerItem) || child.addComponent(UISpuerItem)
-                // 将这三个方法以回调的方式传递过去 (对外不公开调用)
-                script.init(this, this.refreshItem.bind(this), this.isOutOfBoundaryTop.bind(this), this.isOutOfBoundaryBottom.bind(this))
+                script.init(this, this.refreshItem.bind(this))
                 this.node.addChild(child)
+                if (i == 0) this.setHeaderStartPos()
             }
         }
         // 多余的情况下
@@ -213,16 +221,11 @@ export default class UISuperLayout extends cc.Component {
     private refreshItem(target: cc.Node, index: number) {
         cc.Component.EventHandler.emitEvents(this.refreshItemEvents, target, index)
     }
-    private isOutOfBoundaryTop(node: cc.Node) {
-        let width = node.width * this.getUsedScaleValue(node.scaleX) * 2
-        let height = -node.height * this.getUsedScaleValue(node.scaleY) * 2
-        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
-        return offset
-    }
-    private isOutOfBoundaryBottom(node: cc.Node) {
-        let width = -node.width * this.getUsedScaleValue(node.scaleX) * 2
-        let height = node.height * this.getUsedScaleValue(node.scaleY) * 2
-        let offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height))
-        return offset
+    public setHeaderStartPos() {
+        if (!this.header) return
+        let pos = cc.Vec2.ZERO
+        pos.y = (1 - this.header.anchorY) * -this.header.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height
+        pos.x = this.header.anchorX * this.header.width + this.paddingLeft - this.node.anchorX * this.viewSize.width
+        this.header.setPosition(pos)
     }
 }

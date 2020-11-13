@@ -13,7 +13,7 @@ export default class testPanel extends cc.Component {
     private isRandomHeight: boolean = false
     private isRandomWidth: boolean = false
     // 模拟数据总数
-    private total: number = 50
+    private total: number = 0
     private datas: any[] = []
 
     onLoad() {
@@ -105,7 +105,6 @@ export default class testPanel extends cc.Component {
     pullUpLoad(scroll: UISpuerScrollView, event: { refresh: boolean, progress: number }) {
         // 模拟代码 一些UI效果
         this.playAnim(this.footer, event, '松开加载更多', '继续滑')
-
         // event.refresh=true 代表需要加载数据
         if (event.refresh) {
             cc.log("开始异步加载10条数据")

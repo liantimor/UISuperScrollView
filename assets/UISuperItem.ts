@@ -4,27 +4,20 @@ const { ccclass, property } = cc._decorator;
 export default class UISpuerItem extends cc.Component {
     private layout: UISuperLayout
     private refreshItemCallback: Function
-    private isOutOfBoundaryTop: Function
-    private isOutOfBoundaryBottom: Function
 
     onLoad() {
-        this.node['getBounding'] = this.getBounding.bind(this)
+        this.node.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this)
+        this.node.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this)
+        this.node.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this)
     }
-   
-    public init(layout: UISuperLayout, refreshItemCallback: Function, isOutOfBoundaryTop: Function, isOutOfBoundaryBottom: Function) {
+    private resetScrollView() {
+        if (this.isFooter) {
+            this.layout.resetScrollView()
+        }
+    }
+    public init(layout: UISuperLayout, refreshItemCallback: Function) {
         this.layout = layout
         this.refreshItemCallback = refreshItemCallback
-        this.isOutOfBoundaryTop = isOutOfBoundaryTop
-        this.isOutOfBoundaryBottom = isOutOfBoundaryBottom
-    }
-    private getBounding() {
-        this.node.parent['_updateWorldMatrix']()
-        let width = this.node.getContentSize().width
-        let height = this.node.getContentSize().height
-        let rect = cc.rect(-this.node.getAnchorPoint().x * width, -this.node.getAnchorPoint().y * height, width, height)
-        this.node['_calculWorldMatrix']();
-        rect.transformMat4(rect, this.node['_worldMatrix']);
-        return rect
     }
     private get width() {
         return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX)
@@ -67,7 +60,7 @@ export default class UISpuerItem extends cc.Component {
         return false
     }
 
-    private relativePositionBottom(prevNode: cc.Node) {
+    private relativePositionFooter(prevNode: cc.Node) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperAxis.VERTICAL) {
                 let prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY)
@@ -80,7 +73,7 @@ export default class UISpuerItem extends cc.Component {
             }
         }
     }
-    private relativePositionTop(prevNode: cc.Node) {
+    private relativePositionHeader(prevNode: cc.Node) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperAxis.VERTICAL) {
                 let prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY)
@@ -94,32 +87,53 @@ export default class UISpuerItem extends cc.Component {
         }
     }
     // 设置自己相对于上一个兄弟节点的位置
-    private watchBrother() {
+    public watchBrother() {
         let prevIndex = this.node.getSiblingIndex() - 1
         let prevNode = this.node.parent.children[prevIndex]
-        this.relativePositionBottom(prevNode)
+        this.relativePositionFooter(prevNode)
     }
-    private watchSelf() {
+    public watchSelf() {
         // 向下填充
         if (this.isUpdateHeader) {
-            if (this.layout.footer['index'] + 1 == this.layout.maxItemTotal) return
-            let offset = this.isOutOfBoundaryTop(this.node)
+
+            let footer = this.layout.footer
+
+            let index = footer['index'] + 1
+
+            if (index == this.layout.maxItemTotal) return
+
+            let offset = this.layout.isOutOfBoundaryHeader(this.node)
+
             if (this.isOutOfBoundary(offset)) {
-                this.node['index'] = this.layout.footer['index'] + 1
-                this.refreshItemCallback(this.node, this.node['index'])
-                this.relativePositionBottom(this.layout.footer)
+
+                this.node['index'] = index
+
+                this.refreshItemCallback(this.node, index)
+
+                this.relativePositionFooter(footer)
                 this.node.setSiblingIndex(this.layout.node.childrenCount - 1)
             }
         }
         // 向上填充
         if (this.isUpdateFooter) {
-            if (this.layout.header['index'] == 0) return
-            let offset = this.isOutOfBoundaryBottom(this.node)
+
+            let header = this.layout.header
+
+            let index = header['index'] - 1
+
+            if (index == -1) return
+
+            let offset = this.layout.isOutOfBoundaryFooter(this.node)
+
             if (this.isOutOfBoundary(offset)) {
-                this.node['index'] = this.layout.header['index'] - 1
-                this.refreshItemCallback(this.node, this.node['index'])
-                this.relativePositionTop(this.layout.header)
+
+                this.node['index'] = index
+
                 this.node.setSiblingIndex(0)
+
+                this.refreshItemCallback(this.node, index)
+
+                this.relativePositionHeader(header)
             }
         }
     }

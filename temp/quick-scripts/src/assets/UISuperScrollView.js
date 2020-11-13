@@ -43,6 +43,8 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         _this.isLockFooter = false;
         _this.isAutoBack = false;
         _this.isEmitProgress = false;
+        _this.contentOriginPos = null;
+        _this.releaseing = false;
         _this._layout = null;
         return _this;
     }
@@ -70,15 +72,21 @@ var UISpuerScrollView = /** @class */ (function (_super) {
     Object.defineProperty(UISpuerScrollView.prototype, "isHeader", {
         get: function () {
             var _a, _b;
-            return ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) && ((_b = this.layout) === null || _b === void 0 ? void 0 : _b.header['index']) == 0 || false;
+            if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) {
+                return ((_b = this.layout) === null || _b === void 0 ? void 0 : _b.header['index']) == 0;
+            }
+            return true;
         },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(UISpuerScrollView.prototype, "isFooter", {
         get: function () {
-            var _a, _b, _c;
-            return ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) && ((_b = this.layout) === null || _b === void 0 ? void 0 : _b.footer['index']) == ((_c = this.layout) === null || _c === void 0 ? void 0 : _c.maxItemTotal) - 1 || false;
+            var _a;
+            if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) {
+                return this.layout.footer['index'] == this.layout.maxItemTotal - 1;
+            }
+            return true;
         },
         enumerable: false,
         configurable: true
@@ -104,8 +112,31 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             this.isLockHeader = false;
             this.isLockFooter = false;
             this.isEmitProgress = true;
-            this['_outOfBoundaryAmountDirty'] = true;
+            this.releaseing = true;
+            this._outOfBoundaryAmountDirty = true;
             this['_processInertiaScroll']();
+        }
+    };
+    UISpuerScrollView.prototype.stopAutoScroll = function () {
+        _super.prototype['stopAutoScroll'].call(this);
+        this.clearProgress();
+        this.isEmitProgress = false;
+    };
+    UISpuerScrollView.prototype._adjustContentOutOfBoundary = function () {
+        this._outOfBoundaryAmountDirty = true;
+        if (this['_isOutOfBoundary']()) {
+            var outOfBoundary = this.getHowMuchOutOfBoundary(cc.v2(0, 0));
+            var newPosition = this.getContentPosition().add(outOfBoundary);
+            if (!this.contentOriginPos) {
+                this.contentOriginPos = newPosition;
+            }
+            if (this.content) {
+                this.content.setPosition(newPosition);
+                this._updateScrollBar(0);
+            }
+            if (this.contentOriginPos.fuzzyEquals(newPosition, EPSILON)) {
+                this.layout.setHeaderStartPos();
+            }
         }
     };
     /**
@@ -113,10 +144,13 @@ var UISpuerScrollView = /** @class */ (function (_super) {
      * 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(高度|缩放|尺寸) 时保证内容显示正确
      */
     UISpuerScrollView.prototype.reset = function () {
-        this['_outOfBoundaryAmountDirty'] = true;
+        this._outOfBoundaryAmountDirty = true;
         var offset = this.getHowMuchOutOfBoundary();
         if (!offset.fuzzyEquals(cc.v2(0, 0), EPSILON)) {
-            this.isEmitProgress = false;
+            if (!this.releaseing) {
+                this.clearProgress();
+                this.isEmitProgress = false;
+            }
             this['_processInertiaScroll']();
         }
     };
@@ -148,79 +182,68 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             this.isMoveFooter = false;
             this.isAutoBack = false;
             this.isEmitProgress = false;
+            this.releaseing = false;
         }
     };
     UISpuerScrollView.prototype._getContentTopBoundary = function () {
         var _a;
-        var offset = 0;
-        if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) {
-            var local = void 0;
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.header.getBoundingBoxToWorld().yMax));
-            }
-            else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.header['getBounding']().yMax));
-            }
-            offset = local.y + this.layout.paddingTop;
-            if (this.isHeader && this.isLockHeader) {
-                offset += this.headerHeight;
-            }
+        var viewSize = this.view.getContentSize();
+        var local = 0;
+        if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) && this.layout.getReallySize().height > viewSize.height) {
+            local = this.layout.headerBoundaryY + this.layout.paddingTop;
         }
-        return offset;
+        else {
+            local = this._getContentBottomBoundary() + viewSize.height;
+        }
+        if (this.isHeader && this.isLockHeader) {
+            local += this.headerHeight;
+        }
+        return local;
     };
     UISpuerScrollView.prototype._getContentBottomBoundary = function () {
         var _a;
-        var offset = 0;
-        if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) {
-            var local = void 0;
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.footer.getBoundingBoxToWorld().yMin));
-            }
-            else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.footer['getBounding']().yMin));
-            }
-            offset = local.y - this.layout.paddingBottom;
-            if (this.isFooter && this.isLockFooter) {
-                offset -= this.footerHeight;
-            }
+        var viewSize = this.view.getContentSize();
+        var local = 0;
+        if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) && this.layout.getReallySize().height > viewSize.height) {
+            local = this.layout.footerBoundaryY - this.layout.paddingBottom;
         }
-        return offset;
+        else {
+            local = this.layout.node.y - this.layout.node.getAnchorPoint().y * viewSize.height;
+        }
+        if (this.isFooter && this.isLockFooter) {
+            local -= this.footerHeight;
+        }
+        return local;
     };
     UISpuerScrollView.prototype._getContentLeftBoundary = function () {
         var _a;
-        var offset = 0;
-        if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) {
-            var local = void 0;
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.header.getBoundingBoxToWorld().xMin, 0));
-            }
-            else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.header['getBounding']().xMin, 0));
-            }
-            offset = local.x - this.layout.paddingLeft;
-            if (this.isHeader && this.isLockHeader) {
-                offset -= this.headerHeight;
-            }
+        var viewSize = this.view.getContentSize();
+        var local = 0;
+        if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) && this.layout.getReallySize().width > viewSize.width) {
+            local = this.layout.headerBoundaryX - this.layout.paddingLeft;
         }
-        return offset;
+        else {
+            local = this.layout.node.x - this.layout.node.getAnchorPoint().x * viewSize.width;
+        }
+        if (this.isHeader && this.isLockHeader) {
+            local -= this.headerHeight;
+        }
+        return local;
     };
     UISpuerScrollView.prototype._getContentRightBoundary = function () {
         var _a;
-        var offset = 0;
-        if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) {
-            var local = void 0;
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.footer.getBoundingBoxToWorld().xMax, 0));
-            }
-            else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.footer['getBounding']().xMax, 0));
-            }
-            offset = local.x + this.layout.paddingRight;
-            if (this.isFooter && this.isLockFooter) {
-                offset += this.footerHeight;
-            }
+        var viewSize = this.view.getContentSize();
+        var local = 0;
+        if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) && this.layout.getReallySize().width > viewSize.width) {
+            local = this.layout.footerBoundaryX + this.layout.paddingRight;
         }
-        return offset;
+        else {
+            local = this._getContentLeftBoundary() + viewSize.width;
+        }
+        if (this.isFooter && this.isLockFooter) {
+            local += this.footerHeight;
+        }
+        return local;
     };
     UISpuerScrollView.prototype._startAutoScroll = function (deltaMove, timeInSecond, attenuated) {
         if (this.isCalculPull) {
@@ -252,27 +275,29 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             return;
         // 自动回弹时不发送事件 只有在手动滑动时才触发
         if (this['_autoScrollBraking']) {
-            this.emitPullDownEvent({ refresh: false, progress: 0 });
-            this.emitPullUpEvent({ refresh: false, progress: 0 });
+            this.clearProgress();
             this.isAutoBack = true;
         }
         if (this.isAutoBack)
             return;
         var offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x;
         if (offset > 0 && this.isHeader && !this.isLockHeader) {
-            // let progress = Math.min(offset / this.headerOutOffset, 1)
-            var progress = offset / this.headerOutOffset;
+            var progress = offset < EPSILON ? 0 : offset / this.headerOutOffset;
             this.emitPullDownEvent({ refresh: false, progress: progress });
-        }
-        else if (offset < 0 && this.isFooter && !this.isLockFooter) {
-            // let progress = Math.min(-offset / this.footerOutOffset, 1)
-            var progress = -offset / this.footerOutOffset;
-            this.emitPullUpEvent({ refresh: false, progress: progress });
-        }
-        else {
-            this.emitPullDownEvent({ refresh: false, progress: 0 });
             this.emitPullUpEvent({ refresh: false, progress: 0 });
         }
+        else if (offset < 0 && this.isFooter && !this.isLockFooter) {
+            var progress = -offset < EPSILON ? 0 : -offset / this.footerOutOffset;
+            this.emitPullUpEvent({ refresh: false, progress: progress });
+            this.emitPullDownEvent({ refresh: false, progress: 0 });
+        }
+        else {
+            this.clearProgress();
+        }
+    };
+    UISpuerScrollView.prototype.clearProgress = function () {
+        this.emitPullDownEvent({ refresh: false, progress: 0 });
+        this.emitPullUpEvent({ refresh: false, progress: 0 });
     };
     UISpuerScrollView.prototype.emitPullDownEvent = function (data) {
         if (this.isEmitProgress) {

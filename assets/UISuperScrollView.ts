@@ -30,6 +30,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
         displayName: "上拉事件"
     }) pullUpEvents: cc.Component.EventHandler[] = []
 
+    private _outOfBoundaryAmountDirty: boolean
     public deltaMove = cc.Vec2.ZERO
     public get view(): cc.Node { return this['_view'] }
     public set autoScrolling(value: boolean) { this['_autoScrolling'] = value }
@@ -40,6 +41,8 @@ export default class UISpuerScrollView extends cc.ScrollView {
     private isLockFooter: boolean = false
     private isAutoBack: boolean = false
     private isEmitProgress: boolean = false
+    private contentOriginPos: cc.Vec2 = null
+    private releaseing: boolean = false
     private _layout: UISuperLayout = null
     private get layout(): UISuperLayout {
         if (this._layout == null) {
@@ -48,13 +51,19 @@ export default class UISpuerScrollView extends cc.ScrollView {
         return this._layout
     }
     private get isHeader() {
-        return this.layout?.header && this.layout?.header['index'] == 0 || false
+        if (this.layout?.header) {
+            return this.layout?.header['index'] == 0
+        }
+        return true
     }
     private get isFooter() {
-        return this.layout?.footer && this.layout?.footer['index'] == this.layout?.maxItemTotal - 1 || false
+        if (this.layout?.footer) {
+            return this.layout.footer['index'] == this.layout.maxItemTotal - 1
+        }
+        return true
     }
     /** 是否需要计算？如果上拉/下拉事件没有监听者则不需要相关的计算 */
-    private get isCalculPull() {
+    public get isCalculPull() {
         return this.pullDownEvents.length > 0 || this.pullUpEvents.length > 0
     }
     public calculateBoundary() {
@@ -70,8 +79,31 @@ export default class UISpuerScrollView extends cc.ScrollView {
             this.isLockHeader = false
             this.isLockFooter = false
             this.isEmitProgress = true
-            this['_outOfBoundaryAmountDirty'] = true
+            this.releaseing = true
+            this._outOfBoundaryAmountDirty = true
             this['_processInertiaScroll']()
+        }
+    }
+    public stopAutoScroll() {
+        super['stopAutoScroll']()
+        this.clearProgress()
+        this.isEmitProgress = false
+    }
+    private _adjustContentOutOfBoundary() {
+        this._outOfBoundaryAmountDirty = true;
+        if (this['_isOutOfBoundary']()) {
+            let outOfBoundary = this.getHowMuchOutOfBoundary(cc.v2(0, 0));
+            let newPosition = this.getContentPosition().add(outOfBoundary);
+            if (!this.contentOriginPos) {
+                this.contentOriginPos = newPosition
+            }
+            if (this.content) {
+                this.content.setPosition(newPosition);
+                this._updateScrollBar(0);
+            }
+            if (this.contentOriginPos.fuzzyEquals(newPosition, EPSILON)) {
+                this.layout.setHeaderStartPos()
+            }
         }
     }
     /**
@@ -79,10 +111,13 @@ export default class UISpuerScrollView extends cc.ScrollView {
      * 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(高度|缩放|尺寸) 时保证内容显示正确
      */
     public reset() {
-        this['_outOfBoundaryAmountDirty'] = true
+        this._outOfBoundaryAmountDirty = true
         let offset = this.getHowMuchOutOfBoundary()
         if (!offset.fuzzyEquals(cc.v2(0, 0), EPSILON)) {
-            this.isEmitProgress = false
+            if (!this.releaseing) {
+                this.clearProgress()
+                this.isEmitProgress = false
+            }
             this['_processInertiaScroll']()
         }
     }
@@ -113,74 +148,63 @@ export default class UISpuerScrollView extends cc.ScrollView {
             this.isMoveFooter = false
             this.isAutoBack = false
             this.isEmitProgress = false
+            this.releaseing = false
         }
     }
     private _getContentTopBoundary() {
-        let offset = 0
-        if (this.layout?.header) {
-            let local
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.header.getBoundingBoxToWorld().yMax))
-            } else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.header['getBounding']().yMax))
-            }
-            offset = local.y + this.layout.paddingTop
-            if (this.isHeader && this.isLockHeader) {
-                offset += this.headerHeight
-            }
-
+        let viewSize = this.view.getContentSize()
+        let local = 0
+        
+        if (this.layout?.header && this.layout.getReallySize().height > viewSize.height) {
+            local = this.layout.headerBoundaryY + this.layout.paddingTop
+        } else {
+            local = this._getContentBottomBoundary() + viewSize.height
         }
-        return offset;
+        if (this.isHeader && this.isLockHeader) {
+            local += this.headerHeight
+        }
+        return local
     }
     private _getContentBottomBoundary() {
-        let offset = 0
-        if (this.layout?.footer) {
-            let local
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.footer.getBoundingBoxToWorld().yMin))
-            } else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(0, this.layout.footer['getBounding']().yMin))
-            }
-            offset = local.y - this.layout.paddingBottom
-            if (this.isFooter && this.isLockFooter) {
-                offset -= this.footerHeight
-            }
+        let viewSize = this.view.getContentSize()
+        let local = 0
+  
+        if (this.layout?.footer && this.layout.getReallySize().height > viewSize.height) {
+            local = this.layout.footerBoundaryY - this.layout.paddingBottom
+        } else {
+            local = this.layout.node.y - this.layout.node.getAnchorPoint().y * viewSize.height;
         }
-        return offset
+        if (this.isFooter && this.isLockFooter) {
+            local -= this.footerHeight
+        }
+        return local
     }
     private _getContentLeftBoundary() {
-        let offset = 0
-        if (this.layout?.header) {
-            let local
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.header.getBoundingBoxToWorld().xMin, 0))
-            } else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.header['getBounding']().xMin, 0))
-            }
-            offset = local.x - this.layout.paddingLeft
-            if (this.isHeader && this.isLockHeader) {
-                offset -= this.headerHeight
-            }
+        let viewSize = this.view.getContentSize()
+        let local = 0
+        if (this.layout?.header && this.layout.getReallySize().width > viewSize.width) {
+            local = this.layout.headerBoundaryX - this.layout.paddingLeft
+        } else {
+            local = this.layout.node.x - this.layout.node.getAnchorPoint().x * viewSize.width;
         }
-        return offset
+        if (this.isHeader && this.isLockHeader) {
+            local -= this.headerHeight
+        }
+        return local
     }
     private _getContentRightBoundary() {
-        let offset = 0
-        if (this.layout?.footer) {
-            let local
-            if (this.layout.childBoundingBox) {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.footer.getBoundingBoxToWorld().xMax, 0))
-            } else {
-                local = this.view.convertToNodeSpaceAR(cc.v2(this.layout.footer['getBounding']().xMax, 0))
-            }
-            offset = local.x + this.layout.paddingRight
-            if (this.isFooter && this.isLockFooter) {
-                offset += this.footerHeight
-            }
+        let viewSize = this.view.getContentSize()
+        let local = 0
+        if (this.layout?.footer && this.layout.getReallySize().width > viewSize.width) {
+            local = this.layout.footerBoundaryX + this.layout.paddingRight
+        } else {
+            local = this._getContentLeftBoundary() + viewSize.width
         }
-        return offset
+        if (this.isFooter && this.isLockFooter) {
+            local += this.footerHeight
+        }
+        return local
     }
-
     private _startAutoScroll(deltaMove, timeInSecond, attenuated) {
         if (this.isCalculPull) {
             if (this.isMoveHeader && !this.isLockHeader) {
@@ -198,6 +222,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
         }
         super['_startAutoScroll'](deltaMove, timeInSecond, attenuated)
     }
+
     private _isNecessaryAutoScrollBrake() {
         let result = super['_isNecessaryAutoScrollBrake']()
         if (result) {
@@ -210,29 +235,32 @@ export default class UISpuerScrollView extends cc.ScrollView {
         if (!this.isCalculPull) return
         // 自动回弹时不发送事件 只有在手动滑动时才触发
         if (this['_autoScrollBraking']) {
-            this.emitPullDownEvent({ refresh: false, progress: 0 })
-            this.emitPullUpEvent({ refresh: false, progress: 0 })
+            this.clearProgress()
             this.isAutoBack = true
         }
         if (this.isAutoBack) return
-
         let offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x
         if (offset > 0 && this.isHeader && !this.isLockHeader) {
-            // let progress = Math.min(offset / this.headerOutOffset, 1)
-            let progress = offset / this.headerOutOffset
-            this.emitPullDownEvent({ refresh: false, progress: progress })
-        } else if (offset < 0 && this.isFooter && !this.isLockFooter) {
-            // let progress = Math.min(-offset / this.footerOutOffset, 1)
-            let progress = -offset / this.footerOutOffset
-            this.emitPullUpEvent({ refresh: false, progress: progress })
-        } else {
-            this.emitPullDownEvent({ refresh: false, progress: 0 })
-            this.emitPullUpEvent({ refresh: false, progress: 0 })
-        }
-    }
 
+            let progress = offset < EPSILON ? 0 : offset / this.headerOutOffset
+            this.emitPullDownEvent({ refresh: false, progress: progress })
+            this.emitPullUpEvent({ refresh: false, progress: 0 })
+        } else if (offset < 0 && this.isFooter && !this.isLockFooter) {
+
+            let progress = -offset < EPSILON ? 0 : -offset / this.footerOutOffset
+            this.emitPullUpEvent({ refresh: false, progress: progress })
+            this.emitPullDownEvent({ refresh: false, progress: 0 })
+        } else {
+            this.clearProgress()
+        }
+
+    }
+    private clearProgress() {
+        this.emitPullDownEvent({ refresh: false, progress: 0 })
+        this.emitPullUpEvent({ refresh: false, progress: 0 })
+    }
     private emitPullDownEvent(data: any) {
-        if(this.isEmitProgress){
+        if (this.isEmitProgress) {
             cc.Component.EventHandler.emitEvents(this.pullDownEvents, this, data)
         }
     }
@@ -241,5 +269,4 @@ export default class UISpuerScrollView extends cc.ScrollView {
             cc.Component.EventHandler.emitEvents(this.pullUpEvents, this, data)
         }
     }
-
 }

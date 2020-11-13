@@ -31,22 +31,18 @@ var UISpuerItem = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     UISpuerItem.prototype.onLoad = function () {
-        this.node['getBounding'] = this.getBounding.bind(this);
+        this.node.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
+        this.node.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
+        this.node.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
     };
-    UISpuerItem.prototype.init = function (layout, refreshItemCallback, isOutOfBoundaryTop, isOutOfBoundaryBottom) {
+    UISpuerItem.prototype.resetScrollView = function () {
+        if (this.isFooter) {
+            this.layout.resetScrollView();
+        }
+    };
+    UISpuerItem.prototype.init = function (layout, refreshItemCallback) {
         this.layout = layout;
         this.refreshItemCallback = refreshItemCallback;
-        this.isOutOfBoundaryTop = isOutOfBoundaryTop;
-        this.isOutOfBoundaryBottom = isOutOfBoundaryBottom;
-    };
-    UISpuerItem.prototype.getBounding = function () {
-        this.node.parent['_updateWorldMatrix']();
-        var width = this.node.getContentSize().width;
-        var height = this.node.getContentSize().height;
-        var rect = cc.rect(-this.node.getAnchorPoint().x * width, -this.node.getAnchorPoint().y * height, width, height);
-        this.node['_calculWorldMatrix']();
-        rect.transformMat4(rect, this.node['_worldMatrix']);
-        return rect;
     };
     Object.defineProperty(UISpuerItem.prototype, "width", {
         get: function () {
@@ -111,7 +107,7 @@ var UISpuerItem = /** @class */ (function (_super) {
         }
         return false;
     };
-    UISpuerItem.prototype.relativePositionBottom = function (prevNode) {
+    UISpuerItem.prototype.relativePositionFooter = function (prevNode) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
                 var prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY);
@@ -125,7 +121,7 @@ var UISpuerItem = /** @class */ (function (_super) {
             }
         }
     };
-    UISpuerItem.prototype.relativePositionTop = function (prevNode) {
+    UISpuerItem.prototype.relativePositionHeader = function (prevNode) {
         if (prevNode) {
             if (this.layout.startAxis == UISuperLayout_1.UISuperAxis.VERTICAL) {
                 var prevHeight = prevNode.height * this.layout.getUsedScaleValue(prevNode.scaleY);
@@ -143,31 +139,35 @@ var UISpuerItem = /** @class */ (function (_super) {
     UISpuerItem.prototype.watchBrother = function () {
         var prevIndex = this.node.getSiblingIndex() - 1;
         var prevNode = this.node.parent.children[prevIndex];
-        this.relativePositionBottom(prevNode);
+        this.relativePositionFooter(prevNode);
     };
     UISpuerItem.prototype.watchSelf = function () {
         // 向下填充
         if (this.isUpdateHeader) {
-            if (this.layout.footer['index'] + 1 == this.layout.maxItemTotal)
+            var footer = this.layout.footer;
+            var index = footer['index'] + 1;
+            if (index == this.layout.maxItemTotal)
                 return;
-            var offset = this.isOutOfBoundaryTop(this.node);
+            var offset = this.layout.isOutOfBoundaryHeader(this.node);
             if (this.isOutOfBoundary(offset)) {
-                this.node['index'] = this.layout.footer['index'] + 1;
-                this.refreshItemCallback(this.node, this.node['index']);
-                this.relativePositionBottom(this.layout.footer);
+                this.node['index'] = index;
+                this.refreshItemCallback(this.node, index);
+                this.relativePositionFooter(footer);
                 this.node.setSiblingIndex(this.layout.node.childrenCount - 1);
             }
         }
         // 向上填充
         if (this.isUpdateFooter) {
-            if (this.layout.header['index'] == 0)
+            var header = this.layout.header;
+            var index = header['index'] - 1;
+            if (index == -1)
                 return;
-            var offset = this.isOutOfBoundaryBottom(this.node);
+            var offset = this.layout.isOutOfBoundaryFooter(this.node);
             if (this.isOutOfBoundary(offset)) {
-                this.node['index'] = this.layout.header['index'] - 1;
-                this.refreshItemCallback(this.node, this.node['index']);
-                this.relativePositionTop(this.layout.header);
+                this.node['index'] = index;
                 this.node.setSiblingIndex(0);
+                this.refreshItemCallback(this.node, index);
+                this.relativePositionHeader(header);
             }
         }
     };

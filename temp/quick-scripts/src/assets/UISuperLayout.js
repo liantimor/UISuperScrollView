@@ -51,6 +51,16 @@ var UISuperLayout = /** @class */ (function (_super) {
         _this._scrollView = null;
         return _this;
     }
+    Object.defineProperty(UISuperLayout.prototype, "viewSize", {
+        get: function () {
+            if (!this._viewSize) {
+                this._viewSize = this.scrollView.view.getContentSize();
+            }
+            return this._viewSize;
+        },
+        enumerable: false,
+        configurable: true
+    });
     Object.defineProperty(UISuperLayout.prototype, "scrollView", {
         get: function () {
             if (!this._scrollView) {
@@ -75,30 +85,57 @@ var UISuperLayout = /** @class */ (function (_super) {
         enumerable: false,
         configurable: true
     });
+    Object.defineProperty(UISuperLayout.prototype, "headerBoundaryX", {
+        get: function () {
+            return this.node.x + this.header.x - this.header.anchorX * this.header.width;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UISuperLayout.prototype, "headerBoundaryY", {
+        get: function () {
+            return this.node.y + this.header.y + (1 - this.header.anchorY) * this.header.height;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UISuperLayout.prototype, "footerBoundaryX", {
+        get: function () {
+            return this.node.x + this.footer.x + (1 - this.footer.anchorX) * this.footer.width;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UISuperLayout.prototype, "footerBoundaryY", {
+        get: function () {
+            return this.node.y + this.footer.y - this.footer.anchorY * this.footer.height;
+        },
+        enumerable: false,
+        configurable: true
+    });
     // 重写
     UISuperLayout.prototype.getContentSize = function () {
-        if (!this.header || !this.footer)
-            return this.scrollView.view.getContentSize();
+        var size = this.getReallySize();
+        var viewSize = this.scrollView.view.getContentSize();
+        if (size.height < viewSize.height) {
+            size.height = viewSize.height;
+        }
+        if (size.width < viewSize.width) {
+            size.width = viewSize.width;
+        }
+        return size;
+    };
+    UISuperLayout.prototype.getReallySize = function () {
+        if (this.node.childrenCount == 0) {
+            return this.viewSize;
+        }
         var size = cc.Size.ZERO;
-        var _header, _footer;
-        if (this.childBoundingBox) {
-            // 该边框包含自身和已激活的子节点的世界边框 (注意！使用此方法时 底层代码会遍历所有子节点 并包含所有子节点的世界边框 子节点越多性能越差)
-            _header = this.node.convertToWorldSpaceAR(cc.v2(this.header.getBoundingBoxToWorld().xMin, this.header.getBoundingBoxToWorld().yMax));
-            _footer = this.node.convertToWorldSpaceAR(cc.v2(this.footer.getBoundingBoxToWorld().xMax, this.footer.getBoundingBoxToWorld().yMin));
-        }
-        else {
-            // 该边框包含自身的世界边框 (这里主要是修改getBoundingBoxToWorld代码 去掉遍历子节点的代码)
-            // 这里只需要计算item本身的世界边框即可 (性能最优)
-            _header = this.node.convertToWorldSpaceAR(cc.v2(this.header['getBounding']().xMin, this.header['getBounding']().yMax));
-            _footer = this.node.convertToWorldSpaceAR(cc.v2(this.footer['getBounding']().xMax, this.footer['getBounding']().yMin));
-        }
-        size.width = _footer.x - _header.x + this.paddingLeft + this.paddingRight;
-        size.height = _header.y - _footer.y + this.paddingTop + this.paddingBottom;
+        size.width = this.footerBoundaryX + -this.headerBoundaryX + this.paddingLeft + this.paddingRight;
+        size.height = this.headerBoundaryY + -this.footerBoundaryY + this.paddingTop + this.paddingBottom;
         return size;
     };
     UISuperLayout.prototype.onLoad = function () {
         this.node.getContentSize = this.getContentSize.bind(this);
-        this.node.on(cc.Node.EventType.CHILD_REORDER, this.listenFooter, this);
     };
     UISuperLayout.prototype.getUsedScaleValue = function (value) {
         return this.affectedByScale ? Math.abs(value) : 1;
@@ -140,59 +177,50 @@ var UISuperLayout = /** @class */ (function (_super) {
             this.scrollToRight(timeInSecond, attenuated);
         }
     };
-    UISuperLayout.prototype.listenFooter = function () {
-        this.header.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
-        this.header.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
-        this.header.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
-        this.footer.off(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
-        this.footer.off(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
-        this.footer.off(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
-        this.footer.on(cc.Node.EventType.POSITION_CHANGED, this.resetScrollView, this);
-        this.footer.on(cc.Node.EventType.SCALE_CHANGED, this.resetScrollView, this);
-        this.footer.on(cc.Node.EventType.SIZE_CHANGED, this.resetScrollView, this);
-    };
-    UISuperLayout.prototype.resetScrollView = function (event) {
+    UISuperLayout.prototype.resetScrollView = function () {
         this.scrollView.reset();
+    };
+    UISuperLayout.prototype.isOutOfBoundaryHeader = function (node) {
+        var width = node.width * this.getUsedScaleValue(node.scaleX) * 2;
+        var height = -node.height * this.getUsedScaleValue(node.scaleY) * 2;
+        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
+        return offset;
+    };
+    UISuperLayout.prototype.isOutOfBoundaryFooter = function (node) {
+        var width = -node.width * this.getUsedScaleValue(node.scaleX) * 2;
+        var height = node.height * this.getUsedScaleValue(node.scaleY) * 2;
+        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
+        return offset;
     };
     UISuperLayout.prototype.scrollToTop = function (timeInSecond, attenuated) {
         if (this.startAxis != UISuperAxis.VERTICAL)
             return;
-        this.refreshStart();
+        this.refreshHeader();
         this.scrollView.deltaMove = cc.v2(0, -1);
         this.scrollView.scrollToTop(timeInSecond, attenuated);
     };
     UISuperLayout.prototype.scrollToBottom = function (timeInSecond, attenuated) {
-        var _this = this;
         if (this.startAxis != UISuperAxis.VERTICAL)
             return;
-        this.refreshEnd();
+        this.refreshFooter();
         this.scrollView.deltaMove = cc.v2(0, 1);
-        /**
-         * item尺寸不一致时 item会在当前帧重置位置 然后在下一帧滚动计算 (这里具体延迟多少帧不确定，因为也许item更新尺寸是异步的，这里不去考虑)
-         * 默认只是认为当前帧会更新完所有item尺寸
-         */
-        this.scheduleOnce(function () { return _this.scrollView.scrollToBottom(timeInSecond, attenuated); });
+        this.scrollView.scrollToBottom(timeInSecond, attenuated);
     };
     UISuperLayout.prototype.scrollToLeft = function (timeInSecond, attenuated) {
         if (this.startAxis != UISuperAxis.HORIZONTAL)
             return;
-        this.refreshStart();
+        this.refreshHeader();
         this.scrollView.deltaMove = cc.v2(1, 0);
         this.scrollView.scrollToLeft(timeInSecond, attenuated);
     };
     UISuperLayout.prototype.scrollToRight = function (timeInSecond, attenuated) {
-        var _this = this;
         if (this.startAxis != UISuperAxis.HORIZONTAL)
             return;
-        this.refreshEnd();
+        this.refreshFooter();
         this.scrollView.deltaMove = cc.v2(-1, 0);
-        /**
-         * item尺寸不一致时 item会在当前帧重置位置 然后在下一帧滚动计算 (这里具体延迟多少帧不确定，因为也许item更新尺寸是异步的，这里不去考虑)
-         * 默认只是认为当前帧会更新完所有item尺寸
-         */
-        this.scheduleOnce(function () { return _this.scrollView.scrollToRight(timeInSecond, attenuated); });
+        this.scrollView.scrollToRight(timeInSecond, attenuated);
     };
-    UISuperLayout.prototype.refreshStart = function () {
+    UISuperLayout.prototype.refreshHeader = function () {
         this.scrollView.stopAutoScroll();
         for (var i = 0; i < this.node.children.length; i++) {
             var child = this.node.children[i];
@@ -200,10 +228,9 @@ var UISuperLayout = /** @class */ (function (_super) {
             this.refreshItem(child, i);
         }
     };
-    UISuperLayout.prototype.refreshEnd = function () {
+    UISuperLayout.prototype.refreshFooter = function () {
         this.scrollView.stopAutoScroll();
         var index = this.maxItemTotal;
-        // 上监听下
         for (var i = this.node.childrenCount - 1; i >= 0; i--) {
             var child = this.node.children[i];
             child['index'] = --index;
@@ -220,9 +247,10 @@ var UISuperLayout = /** @class */ (function (_super) {
                 var child_1 = cc.instantiate(this.prefab);
                 child_1['index'] = i;
                 var script = child_1.getComponent(UISuperItem_1.default) || child_1.addComponent(UISuperItem_1.default);
-                // 将这三个方法以回调的方式传递过去 (对外不公开调用)
-                script.init(this, this.refreshItem.bind(this), this.isOutOfBoundaryTop.bind(this), this.isOutOfBoundaryBottom.bind(this));
+                script.init(this, this.refreshItem.bind(this));
                 this.node.addChild(child_1);
+                if (i == 0)
+                    this.setHeaderStartPos();
             }
         }
         // 多余的情况下
@@ -238,17 +266,13 @@ var UISuperLayout = /** @class */ (function (_super) {
     UISuperLayout.prototype.refreshItem = function (target, index) {
         cc.Component.EventHandler.emitEvents(this.refreshItemEvents, target, index);
     };
-    UISuperLayout.prototype.isOutOfBoundaryTop = function (node) {
-        var width = node.width * this.getUsedScaleValue(node.scaleX) * 2;
-        var height = -node.height * this.getUsedScaleValue(node.scaleY) * 2;
-        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
-        return offset;
-    };
-    UISuperLayout.prototype.isOutOfBoundaryBottom = function (node) {
-        var width = -node.width * this.getUsedScaleValue(node.scaleX) * 2;
-        var height = node.height * this.getUsedScaleValue(node.scaleY) * 2;
-        var offset = this.scrollView.getHowMuchOutOfBoundary(cc.v2(width, height));
-        return offset;
+    UISuperLayout.prototype.setHeaderStartPos = function () {
+        if (!this.header)
+            return;
+        var pos = cc.Vec2.ZERO;
+        pos.y = (1 - this.header.anchorY) * -this.header.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
+        pos.x = this.header.anchorX * this.header.width + this.paddingLeft - this.node.anchorX * this.viewSize.width;
+        this.header.setPosition(pos);
     };
     __decorate([
         property({
