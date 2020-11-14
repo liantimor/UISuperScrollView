@@ -154,5 +154,9 @@ export default class testPanel extends cc.Component {
             node.setScale(scale)
         }
     }
+    overScene(event: any, scene: string) {
+        cc.director.loadScene(scene)
+    }
+
 
 }

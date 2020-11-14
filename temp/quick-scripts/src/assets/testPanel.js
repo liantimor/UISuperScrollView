@@ -178,6 +178,9 @@ var testPanel = /** @class */ (function (_super) {
             node.setScale(scale);
         }
     };
+    testPanel.prototype.overScene = function (event, scene) {
+        cc.director.loadScene(scene);
+    };
     __decorate([
         property(UISuperLayout_1.default)
     ], testPanel.prototype, "layout", void 0);

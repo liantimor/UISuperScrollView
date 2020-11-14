@@ -1,9 +1,9 @@
 {
-  "platform": "android",
-  "actualPlatform": "android",
+  "platform": "web-mobile",
+  "actualPlatform": "web-mobile",
   "template": "default",
   "buildPath": "./build",
-  "debug": true,
+  "debug": false,
   "sourceMaps": false,
   "embedWebDebugger": false,
   "previewWidth": "1280",
