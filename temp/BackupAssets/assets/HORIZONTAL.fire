@@ -192,7 +192,7 @@
       "array": [
         0,
         0,
-        535.2036995387831,
+        554.2562584220408,
         0,
         0,
         0,
@@ -286,7 +286,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1280,
+      "width": 800,
       "height": 500
     },
     "_anchorPoint": {
@@ -370,7 +370,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 1280,
+      "width": 800,
       "height": 500
     },
     "_anchorPoint": {
@@ -573,21 +573,24 @@
     },
     "_enabled": true,
     "startAxis": 0,
-    "paddingTop": 0,
+    "direction": 0,
+    "paddingTop": 50,
     "paddingBottom": 0,
     "paddingLeft": 10,
-    "paddingRight": 10,
+    "paddingRight": 0,
     "spacing": {
       "__type__": "cc.Vec2",
       "x": 10,
-      "y": 0
+      "y": 10
     },
-    "maxPrefabTotal": 20,
+    "column": 3,
+    "multiple": 2,
     "prefab": {
       "__uuid__": "e0ca3d50-c761-4397-93bb-8beea9625960"
     },
+    "headerLoop": true,
+    "footerLoop": true,
     "affectedByScale": true,
-    "childBoundingBox": true,
     "refreshItemEvents": [
       {
         "__id__": 11
@@ -649,7 +652,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -640,
+        -400,
         0,
         0,
         0,
@@ -1095,7 +1098,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        640,
+        400,
         0,
         0,
         0,
@@ -1504,7 +1507,7 @@
     "node": {
       "__id__": 6
     },
-    "_enabled": true,
+    "_enabled": false,
     "_materials": [
       {
         "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
@@ -1599,9 +1602,7 @@
       "__id__": 9
     },
     "headerOutOffset": 300,
-    "headerHeight": 300,
     "footerOutOffset": 300,
-    "footerHeight": 300,
     "pullDownEvents": [
       {
         "__id__": 36
@@ -1641,10 +1642,10 @@
     "node": {
       "__id__": 5
     },
-    "_enabled": true,
+    "_enabled": false,
     "alignMode": 1,
     "_target": null,
-    "_alignFlags": 44,
+    "_alignFlags": 0,
     "_left": 0,
     "_right": 0,
     "_top": 70,

@@ -10,11 +10,15 @@
                     };
                     function __define (exports, require, module) {
                         if (!nodeEnv) {__quick_compile_project__.registerModule(__filename, module);}
-require('./assets/UISuperItem');
-require('./assets/UISuperLayout');
-require('./assets/UISuperScrollView');
-require('./assets/item');
-require('./assets/testPanel');
+require('./assets/cores/UISuperItem');
+require('./assets/cores/UISuperLayout');
+require('./assets/cores/UISuperScrollView');
+require('./assets/examples/chat/chatItem');
+require('./assets/examples/chat/chatPanel');
+require('./assets/examples/main');
+require('./assets/examples/vertical/verticalItem');
+require('./assets/examples/vertical/verticalLoadAndRefresh');
+require('./assets/examples/vertical/verticalSimple');
 
                     }
                     if (nodeEnv) {

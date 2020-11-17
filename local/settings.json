@@ -1,0 +1,7 @@
+{
+  "use-global-engine-setting": true,
+  "use-default-js-engine": true,
+  "js-engine-path": "/Users/weilaijia/Desktop/engine",
+  "use-default-cpp-engine": true,
+  "cpp-engine-path": "/Users/weilaijia/Documents/GitHub/clientengine/native/default/frameworks/cocos2d-x"
+}

@@ -2,5 +2,40 @@
   "migrate-history": [
     "cloud-function"
   ],
-  "last-module-event-record-time": 1605284973571
+  "last-module-event-record-time": 1605284973571,
+  "group-list": [
+    "default"
+  ],
+  "collision-matrix": [
+    [
+      true
+    ]
+  ],
+  "excluded-modules": [
+    "3D Physics/Builtin"
+  ],
+  "start-scene": "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+  "preview-port": 7456,
+  "design-resolution-width": 1280,
+  "design-resolution-height": 640,
+  "fit-width": true,
+  "fit-height": false,
+  "use-project-simulator-setting": false,
+  "simulator-orientation": false,
+  "use-customize-simulator": true,
+  "simulator-resolution": {
+    "height": 640,
+    "width": 960
+  },
+  "clear-simulator-cache": true,
+  "facebook": {
+    "appID": "",
+    "audience": {
+      "enable": false
+    },
+    "enable": false,
+    "live": {
+      "enable": false
+    }
+  }
 }
