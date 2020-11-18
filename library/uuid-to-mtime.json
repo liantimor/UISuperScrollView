@@ -524,11 +524,6 @@
     "meta": 1605641907656,
     "relativePath": "model/primitives.fbx"
   },
-  "05ad9bc7-d003-4073-a9bf-39cd6bcf282f": {
-    "asset": 1605638183958,
-    "meta": 1605638196356,
-    "relativePath": "cores/UISuperItem.ts"
-  },
   "99b10859-9d64-42ac-811d-87000bb2d820": {
     "asset": 1605641281038,
     "meta": 1605641281938,
@@ -540,8 +535,8 @@
     "relativePath": "examples/chat/chatPanel.ts"
   },
   "344237e9-3ecc-4bb9-9017-e66a1fba6e9a": {
-    "asset": 1605654224152,
-    "meta": 1605654224156,
+    "asset": 1605710732107,
+    "meta": 1605710732113,
     "relativePath": "examples/main.fire"
   },
   "f9241237-9745-4f48-bcdf-b1fb7dbfb100": {
@@ -574,34 +569,29 @@
     "meta": 1605654465349,
     "relativePath": "examples/vertical/verticalLoadAndRefresh.fire"
   },
-  "ee16359d-42c2-435c-8f4c-ac046ef7d420": {
-    "asset": 1605649238393,
-    "meta": 1605649242778,
-    "relativePath": "examples/vertical/verticalLoadAndRefresh.ts"
-  },
   "5ccd0542-fcd9-4b25-a00e-35e744a8e305": {
-    "asset": 1605654653863,
-    "meta": 1605654653867,
+    "asset": 1605710939086,
+    "meta": 1605710939093,
     "relativePath": "examples/vertical/verticalFooterToHeader.fire"
   },
   "fc6d916a-5e55-4145-9a50-e59351c98998": {
-    "asset": 1605654623026,
-    "meta": 1605654623032,
+    "asset": 1605710866653,
+    "meta": 1605710866658,
     "relativePath": "examples/vertical/verticalHeaderToFooter.fire"
   },
   "b7c15c54-4160-474c-88b4-97b231f4ccd9": {
-    "asset": 1605654426698,
-    "meta": 1605654426705,
+    "asset": 1605710814765,
+    "meta": 1605710814770,
     "relativePath": "examples/vertical/verticalFooterLoop.fire"
   },
   "18cd3d7d-db83-404e-8e46-8938f1bafd42": {
-    "asset": 1605654446707,
-    "meta": 1605654446711,
+    "asset": 1605710832290,
+    "meta": 1605710832295,
     "relativePath": "examples/vertical/verticalHeaderLoop.fire"
   },
   "630f3d68-561a-46ca-8518-87daa5290cf8": {
-    "asset": 1605654475944,
-    "meta": 1605654475950,
+    "asset": 1605710851950,
+    "meta": 1605710851954,
     "relativePath": "examples/vertical/verticalLoop.fire"
   },
   "2c539efc-7bd8-47c6-b0f4-7ffddb1fd2cf": {
@@ -610,8 +600,8 @@
     "relativePath": "examples/vertical/verticalSimple.ts"
   },
   "8d1b93a2-9a1d-4b76-8a62-7a370fc1f893": {
-    "asset": 1605654500949,
-    "meta": 1605654500953,
+    "asset": 1605710793464,
+    "meta": 1605710793470,
     "relativePath": "examples/grid/gridFooterToHeader.fire"
   },
   "cf9afe0e-ef06-4abe-8700-1b4edb46fb6b": {
@@ -620,18 +610,28 @@
     "relativePath": "cores/UISuperScrollView.ts"
   },
   "dfd1d9e3-2ece-44db-a0c3-0975d86720b4": {
-    "asset": 1605654492911,
-    "meta": 1605654492917,
+    "asset": 1605710786097,
+    "meta": 1605710786102,
     "relativePath": "examples/grid/gridHeaderToFooter.fire"
   },
   "5d2089ad-c67b-4fc8-9363-ee557a13f3ce": {
-    "asset": 1605654484923,
-    "meta": 1605654484930,
+    "asset": 1605710803602,
+    "meta": 1605710803607,
     "relativePath": "examples/grid/gridLoop.fire"
   },
+  "ee16359d-42c2-435c-8f4c-ac046ef7d420": {
+    "asset": 1605708946840,
+    "meta": 1605708996600,
+    "relativePath": "examples/vertical/verticalLoadAndRefresh.ts"
+  },
+  "05ad9bc7-d003-4073-a9bf-39cd6bcf282f": {
+    "asset": 1605715006839,
+    "meta": 1605715020940,
+    "relativePath": "cores/UISuperItem.ts"
+  },
   "699ebd71-5483-4271-9041-1f0020c03053": {
-    "asset": 1605652811158,
-    "meta": 1605652812649,
+    "asset": 1605714997040,
+    "meta": 1605715021090,
     "relativePath": "cores/UISuperLayout.ts"
   }
 }

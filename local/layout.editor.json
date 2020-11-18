@@ -45,7 +45,7 @@
                   "scene",
                   "node-library"
                 ],
-                "height": 442.828125,
+                "height": 938.625,
                 "type": "panel",
                 "width": 1540
               },
@@ -56,7 +56,7 @@
                   "timeline",
                   "game-window"
                 ],
-                "height": 800.671875,
+                "height": 304.875,
                 "type": "panel",
                 "width": 1540
               }
@@ -97,8 +97,8 @@
   },
   "panels": {
     "builder": {
-      "x": 847,
-      "y": 101,
+      "x": 155,
+      "y": 130,
       "width": 500,
       "height": 722
     },

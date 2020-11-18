@@ -814,3 +814,321 @@
 2020-11-17T23:10:44.430Z - normal: Generating main.js from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/shares/main.js
 2020-11-17T23:10:44.437Z - normal: Generating html from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/web-mobile/template/index.html
 2020-11-17T23:10:44.448Z - normal: Built to "/Users/weilaijia/Documents/NewProject_1/build/web-mobile" successfully
+2020-11-18T14:45:34.859Z - normal: Start building with options : {
+  "actualPlatform": "web-mobile",
+  "android": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "org.cocos2d.demo",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "apiLevel": "android-26",
+  "appABIs": [
+    "armeabi-v7a",
+    "arm64-v8a"
+  ],
+  "appBundle": false,
+  "buildPath": "/Users/weilaijia/Documents/NewProject_1/build",
+  "buildScriptsOnly": false,
+  "debug": false,
+  "dest": "/Users/weilaijia/Documents/NewProject_1/build/web-mobile",
+  "embedWebDebugger": false,
+  "encryptJs": false,
+  "excludeScenes": [],
+  "excludedModules": [
+    "3D Physics/Builtin"
+  ],
+  "fb-instant-games": {},
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "ios": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "mac": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "packageName": "org.cocos2d.demo",
+    "width": 1280
+  },
+  "mainCompressionType": "default",
+  "mainIsRemote": false,
+  "md5Cache": false,
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "org.cocos2d.demo",
+  "platform": "web-mobile",
+  "previewHeight": "720",
+  "previewWidth": "1280",
+  "scenes": [
+    "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+    "ec291209-05d7-4e3a-8539-db779d6c0f37",
+    "51302cc2-320b-4157-a2d5-ed9ecc2c2b7a",
+    "5ccd0542-fcd9-4b25-a00e-35e744a8e305",
+    "fc6d916a-5e55-4145-9a50-e59351c98998",
+    "b7c15c54-4160-474c-88b4-97b231f4ccd9",
+    "18cd3d7d-db83-404e-8e46-8938f1bafd42",
+    "630f3d68-561a-46ca-8518-87daa5290cf8",
+    "8d1b93a2-9a1d-4b76-8a62-7a370fc1f893",
+    "dfd1d9e3-2ece-44db-a0c3-0975d86720b4",
+    "5d2089ad-c67b-4fc8-9363-ee557a13f3ce"
+  ],
+  "separateEngineMode": false,
+  "sourceMaps": false,
+  "startScene": "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+  "template": "default",
+  "title": "NewProject_1",
+  "useDebugKeystore": true,
+  "vsVersion": "auto",
+  "webOrientation": "landscape",
+  "win32": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "width": 1280
+  },
+  "xxteaKey": "04879ebf-467e-4d",
+  "zipCompressJs": true,
+  "project": "/Users/weilaijia/Documents/NewProject_1",
+  "projectName": "NewProject_1",
+  "debugBuildWorker": false
+}
+2020-11-18T14:45:34.860Z - normal: Building /Users/weilaijia/Documents/NewProject_1
+2020-11-18T14:45:34.860Z - normal: Destination /Users/weilaijia/Documents/NewProject_1/build/web-mobile
+2020-11-18T14:45:34.861Z - normal: Delete /Users/weilaijia/Documents/NewProject_1/build/web-mobile/**/*
+2020-11-18T14:45:34.875Z - normal: Building 3D physics modules...
+2020-11-18T14:45:41.364Z - normal: Start building assets
+2020-11-18T14:45:41.364Z - normal: Start spawn build-worker
+2020-11-18T14:45:41.746Z - normal: Finish spawn build-worker
+2020-11-18T14:45:41.746Z - normal: Start init build-worker
+2020-11-18T14:45:43.256Z - normal: Finish init build-worker
+2020-11-18T14:45:43.256Z - normal: Start build-assets in worker
+2020-11-18T14:45:43.524Z - normal: Finish build-assets in worker
+2020-11-18T14:45:43.535Z - normal: Finish building assets
+2020-11-18T14:45:43.538Z - normal: Start building plugin scripts
+2020-11-18T14:45:43.574Z - normal: Generating main.js from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/shares/main.js
+2020-11-18T14:45:43.577Z - normal: Generating html from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/web-mobile/template/index.html
+2020-11-18T14:45:43.585Z - normal: Built to "/Users/weilaijia/Documents/NewProject_1/build/web-mobile" successfully
+2020-11-18T14:49:01.905Z - normal: Start building with options : {
+  "actualPlatform": "web-mobile",
+  "android": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "org.cocos2d.demo",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "apiLevel": "android-26",
+  "appABIs": [
+    "armeabi-v7a",
+    "arm64-v8a"
+  ],
+  "appBundle": false,
+  "buildPath": "/Users/weilaijia/Documents/NewProject_1/build",
+  "buildScriptsOnly": false,
+  "debug": false,
+  "dest": "/Users/weilaijia/Documents/NewProject_1/build/web-mobile",
+  "embedWebDebugger": false,
+  "encryptJs": false,
+  "excludeScenes": [],
+  "excludedModules": [
+    "3D Physics/Builtin"
+  ],
+  "fb-instant-games": {},
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "ios": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "mac": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "packageName": "org.cocos2d.demo",
+    "width": 1280
+  },
+  "mainCompressionType": "default",
+  "mainIsRemote": false,
+  "md5Cache": false,
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "org.cocos2d.demo",
+  "platform": "web-mobile",
+  "previewHeight": "720",
+  "previewWidth": "1280",
+  "scenes": [
+    "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+    "ec291209-05d7-4e3a-8539-db779d6c0f37",
+    "51302cc2-320b-4157-a2d5-ed9ecc2c2b7a",
+    "5ccd0542-fcd9-4b25-a00e-35e744a8e305",
+    "fc6d916a-5e55-4145-9a50-e59351c98998",
+    "b7c15c54-4160-474c-88b4-97b231f4ccd9",
+    "18cd3d7d-db83-404e-8e46-8938f1bafd42",
+    "630f3d68-561a-46ca-8518-87daa5290cf8",
+    "8d1b93a2-9a1d-4b76-8a62-7a370fc1f893",
+    "dfd1d9e3-2ece-44db-a0c3-0975d86720b4",
+    "5d2089ad-c67b-4fc8-9363-ee557a13f3ce"
+  ],
+  "separateEngineMode": false,
+  "sourceMaps": false,
+  "startScene": "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+  "template": "default",
+  "title": "NewProject_1",
+  "useDebugKeystore": true,
+  "vsVersion": "auto",
+  "webOrientation": "landscape",
+  "win32": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "width": 1280
+  },
+  "xxteaKey": "04879ebf-467e-4d",
+  "zipCompressJs": true,
+  "project": "/Users/weilaijia/Documents/NewProject_1",
+  "projectName": "NewProject_1",
+  "debugBuildWorker": false
+}
+2020-11-18T14:49:01.905Z - normal: Building /Users/weilaijia/Documents/NewProject_1
+2020-11-18T14:49:01.905Z - normal: Destination /Users/weilaijia/Documents/NewProject_1/build/web-mobile
+2020-11-18T14:49:01.906Z - normal: Delete /Users/weilaijia/Documents/NewProject_1/build/web-mobile/**/*
+2020-11-18T14:49:01.919Z - normal: Building 3D physics modules...
+2020-11-18T14:49:07.959Z - normal: Start building assets
+2020-11-18T14:49:07.959Z - normal: Start spawn build-worker
+2020-11-18T14:49:08.365Z - normal: Finish spawn build-worker
+2020-11-18T14:49:08.365Z - normal: Start init build-worker
+2020-11-18T14:49:09.736Z - normal: Finish init build-worker
+2020-11-18T14:49:09.736Z - normal: Start build-assets in worker
+2020-11-18T14:49:10.050Z - normal: Finish build-assets in worker
+2020-11-18T14:49:10.062Z - normal: Finish building assets
+2020-11-18T14:49:10.065Z - normal: Start building plugin scripts
+2020-11-18T14:49:10.101Z - normal: Generating main.js from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/shares/main.js
+2020-11-18T14:49:10.104Z - normal: Generating html from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/web-mobile/template/index.html
+2020-11-18T14:49:10.113Z - normal: Built to "/Users/weilaijia/Documents/NewProject_1/build/web-mobile" successfully
+2020-11-18T15:57:35.296Z - normal: Start building with options : {
+  "actualPlatform": "web-mobile",
+  "android": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "android-instant": {
+    "REMOTE_SERVER_ROOT": "",
+    "host": "",
+    "packageName": "org.cocos2d.demo",
+    "pathPattern": "",
+    "recordPath": "",
+    "scheme": "https",
+    "skipRecord": false
+  },
+  "apiLevel": "android-26",
+  "appABIs": [
+    "armeabi-v7a",
+    "arm64-v8a"
+  ],
+  "appBundle": false,
+  "buildPath": "/Users/weilaijia/Documents/NewProject_1/build",
+  "buildScriptsOnly": false,
+  "debug": false,
+  "dest": "/Users/weilaijia/Documents/NewProject_1/build/web-mobile",
+  "embedWebDebugger": false,
+  "encryptJs": false,
+  "excludeScenes": [],
+  "excludedModules": [
+    "3D Physics/Builtin"
+  ],
+  "fb-instant-games": {},
+  "inlineSpriteFrames": true,
+  "inlineSpriteFrames_native": true,
+  "ios": {
+    "REMOTE_SERVER_ROOT": "",
+    "packageName": "org.cocos2d.demo"
+  },
+  "mac": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "packageName": "org.cocos2d.demo",
+    "width": 1280
+  },
+  "mainCompressionType": "default",
+  "mainIsRemote": false,
+  "md5Cache": false,
+  "optimizeHotUpdate": false,
+  "orientation": {
+    "landscapeLeft": true,
+    "landscapeRight": true,
+    "portrait": false,
+    "upsideDown": false
+  },
+  "packageName": "org.cocos2d.demo",
+  "platform": "web-mobile",
+  "previewHeight": "720",
+  "previewWidth": "1280",
+  "scenes": [
+    "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+    "ec291209-05d7-4e3a-8539-db779d6c0f37",
+    "51302cc2-320b-4157-a2d5-ed9ecc2c2b7a",
+    "5ccd0542-fcd9-4b25-a00e-35e744a8e305",
+    "fc6d916a-5e55-4145-9a50-e59351c98998",
+    "b7c15c54-4160-474c-88b4-97b231f4ccd9",
+    "18cd3d7d-db83-404e-8e46-8938f1bafd42",
+    "630f3d68-561a-46ca-8518-87daa5290cf8",
+    "8d1b93a2-9a1d-4b76-8a62-7a370fc1f893",
+    "dfd1d9e3-2ece-44db-a0c3-0975d86720b4",
+    "5d2089ad-c67b-4fc8-9363-ee557a13f3ce"
+  ],
+  "separateEngineMode": false,
+  "sourceMaps": false,
+  "startScene": "344237e9-3ecc-4bb9-9017-e66a1fba6e9a",
+  "template": "default",
+  "title": "NewProject_1",
+  "useDebugKeystore": true,
+  "vsVersion": "auto",
+  "webOrientation": "landscape",
+  "win32": {
+    "REMOTE_SERVER_ROOT": "",
+    "height": 720,
+    "width": 1280
+  },
+  "xxteaKey": "04879ebf-467e-4d",
+  "zipCompressJs": true,
+  "project": "/Users/weilaijia/Documents/NewProject_1",
+  "projectName": "NewProject_1",
+  "debugBuildWorker": false
+}
+2020-11-18T15:57:35.297Z - normal: Building /Users/weilaijia/Documents/NewProject_1
+2020-11-18T15:57:35.297Z - normal: Destination /Users/weilaijia/Documents/NewProject_1/build/web-mobile
+2020-11-18T15:57:35.298Z - normal: Delete /Users/weilaijia/Documents/NewProject_1/build/web-mobile/**/*
+2020-11-18T15:57:35.316Z - normal: Building 3D physics modules...
+2020-11-18T15:57:41.660Z - normal: Start building assets
+2020-11-18T15:57:41.661Z - normal: Start spawn build-worker
+2020-11-18T15:57:42.029Z - normal: Finish spawn build-worker
+2020-11-18T15:57:42.029Z - normal: Start init build-worker
+2020-11-18T15:57:43.499Z - normal: Finish init build-worker
+2020-11-18T15:57:43.499Z - normal: Start build-assets in worker
+2020-11-18T15:57:43.797Z - normal: Finish build-assets in worker
+2020-11-18T15:57:43.808Z - normal: Finish building assets
+2020-11-18T15:57:43.811Z - normal: Start building plugin scripts
+2020-11-18T15:57:43.850Z - normal: Generating main.js from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/shares/main.js
+2020-11-18T15:57:43.854Z - normal: Generating html from /Applications/CocosCreator/Creator/2.4.3/CocosCreator.app/Contents/Resources/static/build-templates/web-mobile/template/index.html
+2020-11-18T15:57:43.865Z - normal: Built to "/Users/weilaijia/Documents/NewProject_1/build/web-mobile" successfully
