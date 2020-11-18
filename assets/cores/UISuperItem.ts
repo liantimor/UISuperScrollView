@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:38
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 01:15:59
+ * @Last Modified time: 2020-11-19 02:13:58
  * @Description: Description
  */
 import UISuperLayout, { UIChangeBrotherEvnet } from './UISuperLayout';
@@ -14,23 +14,28 @@ export default class UISpuerItem extends cc.Component {
     private brother: cc.Node
     private originSize: cc.Size
     private originScale: cc.Vec2
-    /** 我真实的宽度 */
+    /** 根据可视范围 和 一组item的个数 去掉 边距/间隔 来计算本item的真实宽度 */
     private get width() {
         if (this.layout.vertical) {
+            // 垂直滑动时 固定宽度
             return (this.layout.accommodWidth - this.layout.spacingWidth) / this.layout.column
         } else {
+            // 水平模式时 宽度随意
             return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX)
         }
     }
-    /** 我真实的个高度 */
+    /** 根据可视范围 和 一组item的个数 去掉 边距/间隔 来计算本item的真实高度 */
     private get height() {
         if (this.layout.horizontal) {
+            // 水平模式时 固定高度
             return (this.layout.accommodHeight - this.layout.spacingWidth) / this.layout.column
         } else {
+            // 垂直滑动时 高度随意
             return this.node.height * this.layout.getUsedScaleValue(this.node.scaleY)
         }
     }
     onLoad() {
+        // 向node写入一个方法 省去了先获取组件然后调用的步骤
         this.node['watchSelf'] = this.watchSelf.bind(this)
         let widget = this.node.getComponent(cc.Widget)
         if (widget) {
@@ -119,7 +124,6 @@ export default class UISpuerItem extends cc.Component {
         if (!this.isOutOfBoundary(offset)) return
         // 将自己的数据索引 + 1
         this.node['index'] = index
-        // this.node['index'] = this.layout.footer['index'] + 1
         // 发送通知到应用层 刷新显示
         this.layout.notifyRefreshItem(this.node)
         // 发给监听我的节点 通知我离开了 移除对我的所有监听

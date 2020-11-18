@@ -15,6 +15,18 @@ export default class verticalLoadAndRefresh extends cc.Component {
         this.footer.scaleY = 0
     }
     private onRefreshEvent(node: cc.Node, index: number) {
+        /**
+         * 如果你感觉每次都要getComponent获取脚本很麻烦或性能不佳时可以这么做
+         * 方法一
+         * 在verticalItem脚本中使用 this.node.on("show",this.show,this) 来监听
+         * 这里使用 node.emit("show",info)发送事件
+         * 
+         * 方法二
+         * 在verticalItem脚本中使用 this.node["show"]=this.show.bind(this) 来向node写入一个自定义方法
+         * 这里使用 node["show"](info) 来调用
+         * 
+         * 这两种方法都省去了 getComponent 的调用 不过方法二看起来不是很美 但却很方便 我就经常这么做😂
+         */
         let info = this.datas[index]
         node.getComponent(verticalItem).show(info, index, this.onRemove.bind(this))
     }

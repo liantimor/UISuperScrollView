@@ -72,7 +72,7 @@ exports.UISuperDirection = exports.UISuperAxis = exports.UIChangeBrotherEvnet = 
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:52
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 01:16:47
+ * @Last Modified time: 2020-11-19 02:06:16
  * @Description: 名词说明 什么是一组item？
  * 垂直模式
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
@@ -125,10 +125,12 @@ var UISuperLayout = /** @class */ (function (_super) {
         _this._scrollView = null;
         _this._maxItemTotal = 0;
         _this._prevLayoutPosition = cc.Vec2.ZERO;
+        /** 当前的滚动是否是由 scrollTo 方法执行的 和touch滑动做个区分*/
         _this.scrollToHeaderOrFooter = false;
         return _this;
     }
     Object.defineProperty(UISuperLayout.prototype, "layoutDirection", {
+        /** 根据上一次和本次的坐标变化计算滑动方向 */
         get: function () {
             var pos = cc.Vec2.ZERO;
             if (this.vertical) {
@@ -144,6 +146,7 @@ var UISuperLayout = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(UISuperLayout.prototype, "isScrollToFooter", {
+        /** 是否是向下滑动 */
         get: function () {
             if (this.vertical) {
                 return this.layoutDirection.y < 0;
@@ -156,21 +159,25 @@ var UISuperLayout = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(UISuperLayout.prototype, "children", {
+        /** 自己维护的子节点数组 和this.node.children 保持同步 */
         get: function () { return this._children; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(UISuperLayout.prototype, "maxItemTotal", {
+        /** 最大数据总数 */
         get: function () { return this._maxItemTotal; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(UISuperLayout.prototype, "maxPrefabTotal", {
+        /** 当前被创建的item总数 */
         get: function () { return this._maxPrefabTotal; },
         enumerable: false,
         configurable: true
     });
     Object.defineProperty(UISuperLayout.prototype, "viewSize", {
+        /** scrollView.view尺寸 */
         get: function () {
             if (!this._viewSize)
                 this._viewSize = this.scrollView.view.getContentSize();
@@ -390,7 +397,7 @@ var UISuperLayout = /** @class */ (function (_super) {
         if (this.node.childrenCount == 0)
             return this.viewSize;
         var size = cc.Size.ZERO;
-        if (this.headerToFooter) {
+        if (this.headerToFooter) { // 根据header和footer计算出真实的content尺寸 
             size.width = this.footerBoundaryX + -this.headerBoundaryX + this.paddingLeft + this.paddingRight;
             size.height = this.headerBoundaryY + -this.footerBoundaryY + this.paddingTop + this.paddingBottom;
         }
@@ -454,26 +461,26 @@ var UISuperLayout = /** @class */ (function (_super) {
     /** 获取一组item中起始位置 （垂直滑动中 一组item 就是单行的所有列 、水平滑动中 一组item 就是单列中所有行）*/
     UISuperLayout.prototype.getGroupHeader = function (node) {
         var pos = cc.Vec2.ZERO;
-        if (node) {
-            if (this.vertical) {
-                if (this.headerToFooter) {
-                    pos.x = node.anchorX * this.getScaleWidth(node) + (this.paddingLeft * node.scaleX) - (this.node.anchorX * this.viewSize.width * node.scaleX);
-                    pos.y = (1 - node.anchorY) * -this.getScaleHeight(node) - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
-                }
-                else {
-                    pos.x = node.anchorX * this.getScaleWidth(node) + this.paddingLeft - this.node.anchorX * this.viewSize.width;
-                    pos.y = node.anchorY * this.getScaleHeight(node) + this.paddingBottom - this.node.anchorY * this.viewSize.height;
-                }
+        if (!node)
+            return pos;
+        if (this.vertical) {
+            if (this.headerToFooter) {
+                pos.x = node.anchorX * this.getScaleWidth(node) + (this.paddingLeft * node.scaleX) - (this.node.anchorX * this.viewSize.width * node.scaleX);
+                pos.y = (1 - node.anchorY) * -this.getScaleHeight(node) - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
             }
             else {
-                if (this.headerToFooter) {
-                    pos.x = node.anchorX * this.getScaleWidth(node) + this.paddingLeft - this.node.anchorX * this.viewSize.width;
-                    pos.y = (1 - node.anchorY) * -node.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
-                }
-                else {
-                    pos.x = this.accommodWidth * this.node.anchorX - this.getScaleWidth(node) * (1 - node.anchorX);
-                    pos.y = (1 - node.anchorY) * -node.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
-                }
+                pos.x = node.anchorX * this.getScaleWidth(node) + this.paddingLeft - this.node.anchorX * this.viewSize.width;
+                pos.y = node.anchorY * this.getScaleHeight(node) + this.paddingBottom - this.node.anchorY * this.viewSize.height;
+            }
+        }
+        else {
+            if (this.headerToFooter) {
+                pos.x = node.anchorX * this.getScaleWidth(node) + this.paddingLeft - this.node.anchorX * this.viewSize.width;
+                pos.y = (1 - node.anchorY) * -node.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
+            }
+            else {
+                pos.x = this.accommodWidth * this.node.anchorX - this.getScaleWidth(node) * (1 - node.anchorX);
+                pos.y = (1 - node.anchorY) * -node.height - this.paddingTop + (1 - this.node.anchorY) * this.viewSize.height;
             }
         }
         return pos;
@@ -481,15 +488,15 @@ var UISuperLayout = /** @class */ (function (_super) {
     /** 获取一组item中结束位置 （垂直滑动中 一组item 就是单行的所有列 、水平滑动中 一组item 就是单列中所有行）*/
     UISuperLayout.prototype.getGroupFooter = function (node) {
         var pos = cc.Vec2.ZERO;
-        if (node) {
-            if (this.vertical) {
-                pos.x = (this.accommodWidth + this.paddingLeft) * this.node.anchorX - (this.getScaleWidth(node) * (1 - node.anchorX) + this.node.anchorX * this.paddingRight);
-                pos.y = node.y;
-            }
-            else {
-                pos.x = node.x;
-                pos.y = -((this.accommodHeight + this.paddingTop) * this.node.anchorY - this.getScaleHeight(node) * node.anchorY) + (1 - node.anchorY) * this.paddingBottom;
-            }
+        if (!node)
+            return pos;
+        if (this.vertical) {
+            pos.x = (this.accommodWidth + this.paddingLeft) * this.node.anchorX - (this.getScaleWidth(node) * (1 - node.anchorX) + this.node.anchorX * this.paddingRight);
+            pos.y = node.y;
+        }
+        else {
+            pos.x = node.x;
+            pos.y = -((this.accommodHeight + this.paddingTop) * this.node.anchorY - this.getScaleHeight(node) * node.anchorY) + (1 - node.anchorY) * this.paddingBottom;
         }
         return pos;
     };
@@ -591,6 +598,7 @@ var UISuperLayout = /** @class */ (function (_super) {
     };
     /** 自定义索引方法 这里不是通过实时修改节点索引的方法，只是模拟类似的功能，实际上并没有真正改变节点的实际顺序（优化项） */
     UISuperLayout.prototype.setSiblingIndex = function (node, index) {
+        // 此方法时参考引擎原setSiblingIndex方法 去掉了修改节点索引位置的调用（item本身的zIndex没有任何变化）
         index = index !== -1 ? index : this._children.length - 1;
         var oldIndex = this._children.indexOf(node);
         if (index !== oldIndex) {
@@ -601,6 +609,10 @@ var UISuperLayout = /** @class */ (function (_super) {
             else {
                 this._children.push(node);
             }
+            /**
+             * 这里区别于原方法 原方法是改变node节点顺序后发送cc.Node.EventType.SIBLING_ORDER_CHANGED通知 这里不需要修改节点顺序
+             * 这里发送一个自定义事件 模拟 SIBLING_ORDER_CHANGED 通知
+             */
             this.node.emit(exports.UIChangeBrotherEvnet);
         }
     };
@@ -612,12 +624,13 @@ var UISuperLayout = /** @class */ (function (_super) {
         var _this = this;
         if (this._isinited)
             return;
-        this.node.anchorX = 0.5;
+        this.node.anchorX = 0.5; //固定content的锚点为中心
         this.node.anchorY = 0.5;
-        this.node.setContentSize(this.viewSize);
+        this.node.setContentSize(this.viewSize); //将content的尺寸设置与view相同 （功能用于空列表时也可以下拉刷新和加载） 
+        // 重写 this.node.getContentSize 方法 因为content的真实尺寸不会随着item的数量变化
         this.node.getContentSize = this.getContentSize.bind(this);
         this.node.setPosition(cc.Vec2.ZERO);
-        this.column = this.column < 1 ? 1 : this.column;
+        this.column = this.column < 1 ? 1 : this.column; // 一组item的数量 最少是1 也就是普通的水平/垂直 大于1就是Grid模式
         // 监听content位置变化 刷新header footer节点的相对位置
         this.node.on(cc.Node.EventType.POSITION_CHANGED, function () {
             var flag = _this.isScrollToFooter; // this.isScrollToFooter = true 向下滑动 false 向上滑动
@@ -729,7 +742,7 @@ var UISuperLayout = /** @class */ (function (_super) {
             }
             return dataOffset;
         }
-        // 代表减少了item 计算偏移量 offset<0 注意！这里的逻辑和上面正好相反
+        // 代表减少了item 计算偏移量 offset<0 【注意！这里的逻辑和上面正好相反】
         for (var i = 0; i < Math.abs(dataOffset); i++) {
             var pos = cc.Vec2.ZERO;
             if (this.vertical) {
@@ -772,17 +785,18 @@ var UISuperLayout = /** @class */ (function (_super) {
         if (offset === void 0) { offset = 0; }
         if (!this.header)
             return;
-        var startIndex = this.header['index'] - 1 + offset;
+        var startIndex = this.header['index'] - 1 + offset; // 获取头部item持有的index 加上 数据偏移来计算起始index 
         for (var i = 0; i < this._children.length; i++) {
             var child = this._children[i];
             startIndex++;
+            // 这里的判断用于无限循环滚动的逻辑 如果索引大于数据总数 索引归零
             if (startIndex > value - 1) {
                 startIndex = 0;
             }
-            else if (startIndex < 0) {
+            else if (startIndex < 0) { // 索引小于0 索引定位到数据尾部 保持首尾相连
                 startIndex = value - 1;
             }
-            child['index'] = startIndex;
+            child['index'] = startIndex; //设置当前索引
             this.notifyRefreshItem(child);
         }
     };
@@ -810,48 +824,64 @@ var UISuperLayout = /** @class */ (function (_super) {
             this.notifyRefreshItem(child);
         }
     };
+    /** 删除多余的item */
+    UISuperLayout.prototype.removeChilds = function (value) {
+        // 有多余的item 需要删除
+        var length = this.node.childrenCount - value;
+        // 删除掉多余的item
+        for (var i = 0; i < length; i++) {
+            var child = this.footer;
+            this.remChild(child);
+            child.destroy();
+            this.node.removeChild(child);
+        }
+        if (!this.header)
+            return;
+        // 将头部节点的位置重置到一组item的第一个位置
+        var pos = this.getGroupHeader(this.header);
+        if (this.vertical) {
+            this.header.x = pos.x;
+        }
+        else {
+            this.header.y = pos.y;
+        }
+    };
     /** 分帧创建item */
     UISuperLayout.prototype.asyncCreateItem = function (value) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var length, i, child, pos, total;
+            var total;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        (_a = this._gener) === null || _a === void 0 ? void 0 : _a.return("");
-                        if (this.node.childrenCount > value) {
-                            length = this.node.childrenCount - value;
-                            for (i = 0; i < length; i++) {
-                                child = this.footer;
-                                this.remChild(child);
-                                child.destroy();
-                                this.node.removeChild(child);
-                            }
-                            if (this.header) {
-                                pos = this.getGroupHeader(this.header);
-                                if (this.vertical) {
-                                    this.header.x = pos.x;
-                                }
-                                else {
-                                    this.header.y = pos.y;
-                                }
-                            }
-                            return [2 /*return*/];
-                        }
+                        (_a = this._gener) === null || _a === void 0 ? void 0 : _a.return(""); //取消上一次的分帧任务（如果任务正在执行）
+                        // 有多余的item 需要删除 不处理
+                        if (this.node.childrenCount > value)
+                            return [2 /*return*/, this.removeChilds(value)
+                                // 已经固定item总数 不处理
+                            ];
+                        // 已经固定item总数 不处理
                         if (this._maxPrefabTotal > 0 && this._maxPrefabTotal == this.node.childrenCount)
                             return [2 /*return*/];
-                        total = value - this.node.childrenCount;
+                        total = value - this.node.childrenCount //计算当前应该创建的总数
+                        ;
                         this._gener = this.getGeneratorLength(total, function () {
                             var child = cc.instantiate(_this.prefab);
                             child['index'] = _this.node.childrenCount;
                             _this.addChild(child);
+                            // 获取或添加 UISuperItem
                             var spuerItem = child.getComponent(UISuperItem_1.default) || child.addComponent(UISuperItem_1.default);
                             _this.node.addChild(child);
                             spuerItem.init(_this);
+                            // 如果创建的是第一个item 设置他的起始位置 之后的item会自动相对于他来设置自己 我们只需要确定第一个位置就行了
                             if (_this.node.childrenCount == 1) {
-                                var pos = _this.getGroupHeader(_this.header);
+                                var pos = _this.getGroupHeader(_this.header); //获取一组item中头部位置
                                 _this.header.setPosition(pos);
+                                /**
+                                 * 利用cc.ScrollView的方法来设置content的起始位置 由于content在初始化的时候固定了锚点都为0.5 所以这里必然是坐标0
+                                 * 如果你没有其他需求确定用0.5锚点的话 这里可以自己设置为cc.Vec2.ZERO 节省不必要的计算（实际上计算量可忽略不计）
+                                 */
                                 _this.scrollView.calculateBoundary();
                             }
                             var selfHorW, viewHorW;
@@ -863,15 +893,21 @@ var UISuperLayout = /** @class */ (function (_super) {
                                 selfHorW = _this.getReallySize().width;
                                 viewHorW = _this.viewSize.width;
                             }
+                            /**
+                             * 根据排列方向 来判断对比宽度还是高度
+                             * 这里使用参数this.multiple来判断是否需要继续创建 默认为2倍 比如view可视尺寸为800 2倍就是1600
+                             * 根据之前所创建的所有item的尺寸计算是否满足这个尺寸 如果满足则不再继续创建
+                             * 由于是分帧加载 所以下一次创建会等这一次的返回结果 返回false 则终止分帧任务
+                             */
                             if (selfHorW >= viewHorW * _this.multiple && _this.isGroupFooter(_this.footer)) {
                                 _this._maxPrefabTotal = _this.node.childrenCount; //固定item数量 不在继续创建
                                 return false;
                             }
                             return true;
                         });
-                        return [4 /*yield*/, this.exeGenerator(this._gener, 10)];
+                        return [4 /*yield*/, this.exeGenerator(this._gener, 10)]; //执行分帧任务 1帧创建10个
                     case 1:
-                        _b.sent();
+                        _b.sent(); //执行分帧任务 1帧创建10个
                         return [2 /*return*/];
                 }
             });
@@ -885,9 +921,9 @@ var UISuperLayout = /** @class */ (function (_super) {
     /** 同步移除本地变量 children 并发送 UIChangeBrotherEvnet 通知 */
     UISuperLayout.prototype.remChild = function (node) {
         var index = this._children.indexOf(node);
-        if (index != -1) {
-            this._children.splice(index, 1);
-        }
+        if (index == -1)
+            return;
+        this._children.splice(index, 1);
         this.node.emit(exports.UIChangeBrotherEvnet);
     };
     /** 分帧加载 */
