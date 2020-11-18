@@ -6,6 +6,7 @@ export default class UISpuerItem extends cc.Component {
     private brother: cc.Node
     private originSize: cc.Size
     private originScale: cc.Vec2
+    /** 我真实的宽度 */
     private get width() {
         if (this.layout.vertical) {
             return (this.layout.accommodWidth - this.layout.spacingWidth) / this.layout.column
@@ -13,6 +14,7 @@ export default class UISpuerItem extends cc.Component {
             return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX)
         }
     }
+    /** 我真实的个高度 */
     private get height() {
         if (this.layout.horizontal) {
             return (this.layout.accommodHeight - this.layout.spacingWidth) / this.layout.column
@@ -44,13 +46,20 @@ export default class UISpuerItem extends cc.Component {
         this.node.off(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this)
         this.unlisten()
     }
+    /**
+     * 当兄弟节点的顺序变化时 来改变自己监听的对象
+     * 0,1,2,3,4,5,6,7,8,9 例如列表中共有10个item 0是header 9是footer 
+     * 正序排列时 监听的顺序是 9->8->7->6->5->4->3->2->1->0 0的 brother=null 
+     * 向下填充的逻辑是 0跑到9后面 0=footer 0的brother=9 相对9的位置设置自己 此时1=header 
+     * 向上填充的逻辑是 9跑到0前面 此时9=header 9的brother=null 主动设置自己相对于0前面位置之后 0的brother=9 8=footer
+     */
     private onChangeBrother() {
-        let _brother = this.layout.getBrotherNode(this.node)
-        if (_brother?.uuid == this.brother?.uuid) return
-        this.unlisten()
-        this.brother = _brother
-        this.listen()
-        this.watchBrother()
+        let _brother = this.layout.getBrotherNode(this.node) //获取我应该监听的那个兄弟
+        if (_brother?.uuid == this.brother?.uuid) return //如果没有变化 则跳过
+        this.unlisten() //我的兄弟换人了？先移除我原来的
+        this.brother = _brother //他是我的兄弟
+        this.listen() //监听他
+        this.watchBrother() //相对兄弟节点来设置自己的位置
     }
     private listen() {
         this.brother?.on('leave', this.unlisten, this)
@@ -61,11 +70,13 @@ export default class UISpuerItem extends cc.Component {
         this.brother?.off(cc.Node.EventType.POSITION_CHANGED, this.watchBrother, this)
         this.brother = null
     }
+    /** 当我的尺寸/缩放改变时 */
     private watchSize() {
-        if (this.layout.column > 1) {
+        if (this.layout.column > 1) { //如果是Grid模式 不允许修改尺寸/缩放 强制改回来
             this.node.setContentSize(this.originSize)
             this.node.setScale(this.originScale)
         } else {
+            // 如果我监听了兄弟节点就设置自己相对兄弟节点的位置，否则 我就发送一个位置变化的消息 让监听我的兄弟相对我做出变化
             this.brother ? this.watchBrother() : this.node.emit(cc.Node.EventType.POSITION_CHANGED)
             this.layout.resetScrollView()
         }
@@ -73,9 +84,9 @@ export default class UISpuerItem extends cc.Component {
     // 设置自己相对于上一个兄弟节点的位置
     public watchBrother() {
         if (!this.brother) return
-        if (this.layout.headerToFooter) {
+        if (this.layout.headerToFooter) { //正序排列时
             this.headerToFooterRelativeToFooter(this.brother)
-        } else {
+        } else {//倒序排列时
             this.footerToHeaderRelativeToFooter(this.brother)
         }
     }
@@ -115,6 +126,7 @@ export default class UISpuerItem extends cc.Component {
         // 如果此时【头部】已经是第一个数据时
         let index = this.layout.header['index'] - 1
         if (index < 0) {
+            // 如果没有使用无限循环功能 否则不往下走
             if (!this.layout.headerLoop || this.layout.scrollToHeaderOrFooter) return
             index = this.node['index']
         }
@@ -142,6 +154,7 @@ export default class UISpuerItem extends cc.Component {
         // 如果此时【尾部】已经是第一个数据时  
         let index = this.layout.footer['index'] + 1
         if (index > this.layout.maxItemTotal - 1) {
+            // 如果没有使用无限循环功能 否则不往下走
             if (!this.layout.footerLoop || this.layout.scrollToHeaderOrFooter) return
             index = 0
         }
@@ -165,6 +178,7 @@ export default class UISpuerItem extends cc.Component {
         // 如果此时【头部】已经是第一个数据时 
         let index = this.layout.header['index'] - 1
         if (index < 0) {
+            // 如果没有使用无限循环功能 否则不往下走
             if (!this.layout.headerLoop || this.layout.scrollToHeaderOrFooter) return
             index = this.node['index']
         }
