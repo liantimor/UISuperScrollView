@@ -1,3 +1,11 @@
+/*
+ * @Author: steveJobs
+ * @Email: icipiqkm@gmail.com
+ * @Date: 2020-11-19 01:15:38
+ * @Last Modified by: steveJobs
+ * @Last Modified time: 2020-11-19 01:15:59
+ * @Description: Description
+ */
 import UISuperLayout, { UIChangeBrotherEvnet } from './UISuperLayout';
 const { ccclass, property } = cc._decorator;
 @ccclass

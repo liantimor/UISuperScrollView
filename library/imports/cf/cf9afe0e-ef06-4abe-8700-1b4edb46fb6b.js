@@ -23,6 +23,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+/*
+ * @Author: steveJobs
+ * @Email: icipiqkm@gmail.com
+ * @Date: 2020-11-19 01:15:04
+ * @Last Modified by: steveJobs
+ * @Last Modified time: 2020-11-19 01:16:52
+ * @Description: Description
+ */
 var UISuperLayout_1 = require("./UISuperLayout");
 var _a = cc._decorator, ccclass = _a.ccclass, property = _a.property, menu = _a.menu;
 var EPSILON = 1e-4;

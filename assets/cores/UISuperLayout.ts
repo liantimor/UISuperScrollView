@@ -1,6 +1,10 @@
-/**
- * 名词说明
- * 什么是一组item？
+/*
+ * @Author: steveJobs
+ * @Email: icipiqkm@gmail.com
+ * @Date: 2020-11-19 01:15:52
+ * @Last Modified by: steveJobs
+ * @Last Modified time: 2020-11-19 01:16:47
+ * @Description: 名词说明 什么是一组item？
  * 垂直模式  
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
  * 4,5,6

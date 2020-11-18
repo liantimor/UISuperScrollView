@@ -1,3 +1,11 @@
+/*
+ * @Author: steveJobs
+ * @Email: icipiqkm@gmail.com
+ * @Date: 2020-11-19 01:15:04
+ * @Last Modified by: steveJobs
+ * @Last Modified time: 2020-11-19 01:16:52
+ * @Description: Description
+ */
 import UISuperLayout from './UISuperLayout';
 const { ccclass, property, menu } = cc._decorator;
 const EPSILON = 1e-4;
