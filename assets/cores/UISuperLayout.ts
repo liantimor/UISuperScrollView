@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:52
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 02:07:10
+ * @Last Modified time: 2020-12-02 15:04:23
  * @Description: 名词说明 什么是一组item？
  * 垂直模式  
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
@@ -194,6 +194,9 @@ export default class UISuperLayout extends cc.Component {
         } else {
             return this.node.y + this.footer.y + (1 - this.footer.anchorY) * this.getScaleHeight(this.footer)
         }
+    }
+    public get isNormalSize(): boolean {
+        return this.node.getContentSize().equals(this.viewSize)
     }
     /** 重写 this.node.getContentSize 动态计算头尾item 返回虚拟的尺寸 非content设置的尺寸 */
     public getContentSize() {
@@ -411,7 +414,7 @@ export default class UISuperLayout extends cc.Component {
         this.node.anchorY = 0.5
         this.node.setContentSize(this.viewSize) //将content的尺寸设置与view相同 （功能用于空列表时也可以下拉刷新和加载） 
         // 重写 this.node.getContentSize 方法 因为content的真实尺寸不会随着item的数量变化
-        this.node.getContentSize = this.getContentSize.bind(this) 
+        this.node.getContentSize = this.getContentSize.bind(this)
         this.node.setPosition(cc.Vec2.ZERO)
         this.column = this.column < 1 ? 1 : this.column // 一组item的数量 最少是1 也就是普通的水平/垂直 大于1就是Grid模式
         // 监听content位置变化 刷新header footer节点的相对位置
@@ -545,7 +548,7 @@ export default class UISuperLayout extends cc.Component {
             }
             this.header.setPosition(pos)
         }
-        this.scrollView.calculateBoundary() 
+        this.scrollView.calculateBoundary()
         return dataOffset
     }
     /** 刷新所有item数据 根据当前item的 index 刷新 */

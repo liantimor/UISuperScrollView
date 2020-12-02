@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:38
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 02:13:58
+ * @Last Modified time: 2020-12-02 15:04:01
  * @Description: Description
  */
 import UISuperLayout, { UIChangeBrotherEvnet } from './UISuperLayout';
@@ -92,6 +92,9 @@ export default class UISpuerItem extends cc.Component {
             // 如果我监听了兄弟节点就设置自己相对兄弟节点的位置，否则 我就发送一个位置变化的消息 让监听我的兄弟相对我做出变化
             this.brother ? this.watchBrother() : this.node.emit(cc.Node.EventType.POSITION_CHANGED)
             this.layout.resetScrollView()
+        }
+        if (this.node['index'] == 0 && this.layout.isNormalSize) {
+            this.node.setPosition(this.layout.getGroupHeader(this.node))
         }
     }
     // 设置自己相对于上一个兄弟节点的位置
