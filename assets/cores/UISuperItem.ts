@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:38
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-12-02 15:04:01
+ * @Last Modified time: 2020-12-03 15:10:51
  * @Description: Description
  */
 import UISuperLayout, { UIChangeBrotherEvnet } from './UISuperLayout';
@@ -53,7 +53,7 @@ export default class UISpuerItem extends cc.Component {
         this.node.on(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this)
         this.onChangeBrother()
     }
-    onDisable() {
+    onDestroy() {
         this.layout.node.off(UIChangeBrotherEvnet, this.onChangeBrother, this)
         this.node.off(cc.Node.EventType.SIZE_CHANGED, this.watchSize, this)
         this.node.off(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this)
@@ -89,9 +89,20 @@ export default class UISpuerItem extends cc.Component {
             this.node.setContentSize(this.originSize)
             this.node.setScale(this.originScale)
         } else {
+            if (this.layout.vertical && (this.node.getContentSize().width != this.originSize.width || this.node.scaleX != this.originScale.x)) {
+                cc.warn("垂直排列不允许修改【宽度】")
+                this.node.width = this.originSize.width
+                this.node.scaleX = this.originScale.x
+
+            } else if (this.layout.horizontal && (this.node.getContentSize().height != this.originSize.height || this.node.scaleY != this.originScale.y)) {
+                cc.warn("水平排列不允许修改【高度】")
+                this.node.height = this.originSize.height
+                this.node.scaleY = this.originScale.y
+            }
             // 如果我监听了兄弟节点就设置自己相对兄弟节点的位置，否则 我就发送一个位置变化的消息 让监听我的兄弟相对我做出变化
-            this.brother ? this.watchBrother() : this.node.emit(cc.Node.EventType.POSITION_CHANGED)
+            this.brother && this.watchBrother()
             this.layout.resetScrollView()
+            this.node.emit(cc.Node.EventType.POSITION_CHANGED)
         }
         if (this.node['index'] == 0 && this.layout.isNormalSize) {
             this.node.setPosition(this.layout.getGroupHeader(this.node))

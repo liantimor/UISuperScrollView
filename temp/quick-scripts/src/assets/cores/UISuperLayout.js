@@ -72,7 +72,7 @@ exports.UISuperDirection = exports.UISuperAxis = exports.UIChangeBrotherEvnet = 
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:52
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 02:06:16
+ * @Last Modified time: 2020-12-02 15:04:23
  * @Description: 名词说明 什么是一组item？
  * 垂直模式
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
@@ -375,6 +375,13 @@ var UISuperLayout = /** @class */ (function (_super) {
             else {
                 return this.node.y + this.footer.y + (1 - this.footer.anchorY) * this.getScaleHeight(this.footer);
             }
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(UISuperLayout.prototype, "isNormalSize", {
+        get: function () {
+            return this.node.getContentSize().equals(this.viewSize);
         },
         enumerable: false,
         configurable: true

@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:38
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 01:27:19
+ * @Last Modified time: 2020-12-03 15:10:51
  * @Description: Description
  */
 var UISuperLayout_1 = require("./UISuperLayout");
@@ -39,12 +39,14 @@ var UISpuerItem = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(UISpuerItem.prototype, "width", {
-        /** 我真实的宽度 */
+        /** 根据可视范围 和 一组item的个数 去掉 边距/间隔 来计算本item的真实宽度 */
         get: function () {
             if (this.layout.vertical) {
+                // 垂直滑动时 固定宽度
                 return (this.layout.accommodWidth - this.layout.spacingWidth) / this.layout.column;
             }
             else {
+                // 水平模式时 宽度随意
                 return this.node.width * this.layout.getUsedScaleValue(this.node.scaleX);
             }
         },
@@ -52,12 +54,14 @@ var UISpuerItem = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(UISpuerItem.prototype, "height", {
-        /** 我真实的个高度 */
+        /** 根据可视范围 和 一组item的个数 去掉 边距/间隔 来计算本item的真实高度 */
         get: function () {
             if (this.layout.horizontal) {
+                // 水平模式时 固定高度
                 return (this.layout.accommodHeight - this.layout.spacingWidth) / this.layout.column;
             }
             else {
+                // 垂直滑动时 高度随意
                 return this.node.height * this.layout.getUsedScaleValue(this.node.scaleY);
             }
         },
@@ -65,6 +69,7 @@ var UISpuerItem = /** @class */ (function (_super) {
         configurable: true
     });
     UISpuerItem.prototype.onLoad = function () {
+        // 向node写入一个方法 省去了先获取组件然后调用的步骤
         this.node['watchSelf'] = this.watchSelf.bind(this);
         var widget = this.node.getComponent(cc.Widget);
         if (widget) {
@@ -82,7 +87,7 @@ var UISpuerItem = /** @class */ (function (_super) {
         this.node.on(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this);
         this.onChangeBrother();
     };
-    UISpuerItem.prototype.onDisable = function () {
+    UISpuerItem.prototype.onDestroy = function () {
         this.layout.node.off(UISuperLayout_1.UIChangeBrotherEvnet, this.onChangeBrother, this);
         this.node.off(cc.Node.EventType.SIZE_CHANGED, this.watchSize, this);
         this.node.off(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this);
@@ -123,9 +128,23 @@ var UISpuerItem = /** @class */ (function (_super) {
             this.node.setScale(this.originScale);
         }
         else {
+            if (this.layout.vertical && (this.node.getContentSize().width != this.originSize.width || this.node.scaleX != this.originScale.x)) {
+                cc.warn("垂直排列不允许修改【宽度】");
+                this.node.width = this.originSize.width;
+                this.node.scaleX = this.originScale.x;
+            }
+            else if (this.layout.horizontal && (this.node.getContentSize().height != this.originSize.height || this.node.scaleY != this.originScale.y)) {
+                cc.warn("水平排列不允许修改【高度】");
+                this.node.height = this.originSize.height;
+                this.node.scaleY = this.originScale.y;
+            }
             // 如果我监听了兄弟节点就设置自己相对兄弟节点的位置，否则 我就发送一个位置变化的消息 让监听我的兄弟相对我做出变化
-            this.brother ? this.watchBrother() : this.node.emit(cc.Node.EventType.POSITION_CHANGED);
+            this.brother && this.watchBrother();
             this.layout.resetScrollView();
+            this.node.emit(cc.Node.EventType.POSITION_CHANGED);
+        }
+        if (this.node['index'] == 0 && this.layout.isNormalSize) {
+            this.node.setPosition(this.layout.getGroupHeader(this.node));
         }
     };
     // 设置自己相对于上一个兄弟节点的位置
@@ -165,7 +184,6 @@ var UISpuerItem = /** @class */ (function (_super) {
             return;
         // 将自己的数据索引 + 1
         this.node['index'] = index;
-        // this.node['index'] = this.layout.footer['index'] + 1
         // 发送通知到应用层 刷新显示
         this.layout.notifyRefreshItem(this.node);
         // 发给监听我的节点 通知我离开了 移除对我的所有监听
