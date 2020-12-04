@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:04
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 02:34:30
+ * @Last Modified time: 2020-12-04 14:35:43
  * @Description: Description
  */
 import UISuperLayout from './UISuperLayout';
@@ -93,6 +93,17 @@ export default class UISpuerScrollView extends cc.ScrollView {
     public getHowMuchOutOfBoundary(offset?: cc.Vec2) {
         return this['_getHowMuchOutOfBoundary'](offset)
     }
+    onLoad() {
+        this.node.on(cc.Node.EventType.SIZE_CHANGED, this.onChangeSize, this)
+    }
+    onDestroy() {
+        this.node.off(cc.Node.EventType.SIZE_CHANGED, this.onChangeSize, this)
+    }
+    private onChangeSize() {
+        let widget = this.view.getComponent(cc.Widget)
+        if (!widget) return
+        widget.updateAlignment()
+    }
     /** 释放 功能用于上拉加载下拉刷新 解锁头尾固定的尺寸 */
     public release() {
         this.isMoveHeader = false
@@ -115,6 +126,7 @@ export default class UISpuerScrollView extends cc.ScrollView {
             this.clearProgress()
         }
     }
+
     /**重置列表 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(高度|缩放|尺寸) 时保证内容显示正确 */
     public reset() {
         this['_outOfBoundaryAmountDirty'] = true

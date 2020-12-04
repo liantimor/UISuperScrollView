@@ -15,6 +15,9 @@ export default class verticalSimple extends cc.Component {
             }
             this.layout.total(this.datas.length)
         }
+        this.scheduleOnce(() => {
+            this.layout.scrollView.node.width = this.layout.scrollView.node.width + 100
+        }, 3)
     }
 
     private onRefreshEvent(node: cc.Node, index: number) {

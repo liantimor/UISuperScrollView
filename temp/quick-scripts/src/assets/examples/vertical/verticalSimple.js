@@ -37,12 +37,16 @@ var verticalSimple = /** @class */ (function (_super) {
         return _this;
     }
     verticalSimple.prototype.onLoad = function () {
+        var _this = this;
         if (this.init) {
             for (var i = 0; i < this.total; i++) {
                 this.datas.push({ message: "" + this.datas.length });
             }
             this.layout.total(this.datas.length);
         }
+        this.scheduleOnce(function () {
+            _this.layout.scrollView.node.width = _this.layout.scrollView.node.width + 100;
+        }, 3);
     };
     verticalSimple.prototype.onRefreshEvent = function (node, index) {
         var info = this.datas[index];

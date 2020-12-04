@@ -192,7 +192,7 @@
       "array": [
         0,
         0,
-        554.2562584220408,
+        580.237020535574,
         0,
         0,
         0,
@@ -624,7 +624,7 @@
       "__id__": 6
     },
     "_enabled": true,
-    "alignMode": 1,
+    "alignMode": 2,
     "_target": null,
     "_alignFlags": 45,
     "_left": 10,
@@ -1532,7 +1532,7 @@
     },
     "component": "",
     "_componentId": "2c53978e9hHxrD0f/3bH9LP",
-    "handler": "gotoFooter",
+    "handler": "gotoHeader",
     "customEventData": ""
   },
   {
@@ -3192,7 +3192,7 @@
     },
     "component": "",
     "_componentId": "2c53978e9hHxrD0f/3bH9LP",
-    "handler": "gotoHeader",
+    "handler": "gotoFooter",
     "customEventData": ""
   },
   {

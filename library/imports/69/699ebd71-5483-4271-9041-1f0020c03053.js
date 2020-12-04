@@ -72,7 +72,7 @@ exports.UISuperDirection = exports.UISuperAxis = exports.UIChangeBrotherEvnet = 
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:52
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-12-02 15:04:23
+ * @Last Modified time: 2020-12-04 14:40:56
  * @Description: 名词说明 什么是一组item？
  * 垂直模式
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
@@ -179,9 +179,7 @@ var UISuperLayout = /** @class */ (function (_super) {
     Object.defineProperty(UISuperLayout.prototype, "viewSize", {
         /** scrollView.view尺寸 */
         get: function () {
-            if (!this._viewSize)
-                this._viewSize = this.scrollView.view.getContentSize();
-            return this._viewSize;
+            return this.scrollView.view.getContentSize();
         },
         enumerable: false,
         configurable: true
@@ -628,7 +626,6 @@ var UISuperLayout = /** @class */ (function (_super) {
     };
     /** 初始化 */
     UISuperLayout.prototype.initlized = function () {
-        var _this = this;
         if (this._isinited)
             return;
         this.node.anchorX = 0.5; //固定content的锚点为中心
@@ -639,20 +636,44 @@ var UISuperLayout = /** @class */ (function (_super) {
         this.node.setPosition(cc.Vec2.ZERO);
         this.column = this.column < 1 ? 1 : this.column; // 一组item的数量 最少是1 也就是普通的水平/垂直 大于1就是Grid模式
         // 监听content位置变化 刷新header footer节点的相对位置
-        this.node.on(cc.Node.EventType.POSITION_CHANGED, function () {
-            var flag = _this.isScrollToFooter; // this.isScrollToFooter = true 向下滑动 false 向上滑动
-            if (_this.headerToFooter) {
-                flag ? _this.footerToHeaderWatchChilds(flag) : _this.headerToFooterWatchChilds(flag); // 倒序刷新
-            }
-            else {
-                flag ? _this.headerToFooterWatchChilds(flag) : _this.footerToHeaderWatchChilds(flag); // 正序刷新
-            }
-            // 当item 由多到少 并且 当content的位置被重置到初始状态时 重新设置头部的item归位
-            if (_this.vertical && 0 == _this.node.y || _this.horizontal && 0 == _this.node.x) {
-                _this.header.setPosition(_this.getGroupHeader(_this.header));
-            }
-        }, this);
+        this.node.on(cc.Node.EventType.POSITION_CHANGED, this.onChangePosition, this);
+        this.scrollView.view.on(cc.Node.EventType.SIZE_CHANGED, this.resetItemSize, this);
         this._isinited = true;
+    };
+    UISuperLayout.prototype.onDestroy = function () {
+        this.node.off(cc.Node.EventType.POSITION_CHANGED, this.onChangePosition, this);
+        this.scrollView.view.off(cc.Node.EventType.SIZE_CHANGED, this.resetItemSize, this);
+    };
+    UISuperLayout.prototype.onChangePosition = function () {
+        var flag = this.isScrollToFooter; // this.isScrollToFooter = true 向下滑动 false 向上滑动
+        if (this.headerToFooter) {
+            flag ? this.footerToHeaderWatchChilds(flag) : this.headerToFooterWatchChilds(flag); // 倒序刷新
+        }
+        else {
+            flag ? this.headerToFooterWatchChilds(flag) : this.footerToHeaderWatchChilds(flag); // 正序刷新
+        }
+        // 当item 由多到少 并且 当content的位置被重置到初始状态时 重新设置头部的item归位
+        if (this.vertical && 0 == this.node.y || this.horizontal && 0 == this.node.x) {
+            this.header.setPosition(this.getGroupHeader(this.header));
+        }
+    };
+    UISuperLayout.prototype.resetItemSize = function () {
+        // 重新设置原始尺寸
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i]['saveOriginSize']();
+        }
+        // 改变头部位置
+        var pos = this.getGroupHeader(this.header);
+        if (this.vertical) {
+            this.header.x = pos.x;
+        }
+        else {
+            this.header.y = pos.y;
+        }
+        // 通知改变坐标事件
+        for (var i = 0; i < this.children.length; i++) {
+            this.children[i].emit(cc.Node.EventType.POSITION_CHANGED);
+        }
     };
     /** 获取缩放宽度 */
     UISuperLayout.prototype.getScaleWidth = function (node) {

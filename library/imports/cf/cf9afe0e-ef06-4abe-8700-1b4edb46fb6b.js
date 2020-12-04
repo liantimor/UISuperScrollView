@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:04
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-11-19 01:16:52
+ * @Last Modified time: 2020-12-04 14:35:43
  * @Description: Description
  */
 var UISuperLayout_1 = require("./UISuperLayout");
@@ -74,6 +74,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(UISpuerScrollView.prototype, "isHeader", {
+        /** 当前头部的item是否真的是数据的开头 也就是0 */
         get: function () {
             var _a, _b, _c, _d;
             if (this.layout.headerToFooter) {
@@ -92,6 +93,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         configurable: true
     });
     Object.defineProperty(UISpuerScrollView.prototype, "isFooter", {
+        /** 当前尾部的item是否真的是数据的结尾 */
         get: function () {
             var _a, _b, _c;
             if (this.layout.headerToFooter) {
@@ -123,6 +125,19 @@ var UISpuerScrollView = /** @class */ (function (_super) {
     UISpuerScrollView.prototype.getHowMuchOutOfBoundary = function (offset) {
         return this['_getHowMuchOutOfBoundary'](offset);
     };
+    UISpuerScrollView.prototype.onLoad = function () {
+        this.node.on(cc.Node.EventType.SIZE_CHANGED, this.onChangeSize, this);
+    };
+    UISpuerScrollView.prototype.onDestroy = function () {
+        this.node.off(cc.Node.EventType.SIZE_CHANGED, this.onChangeSize, this);
+    };
+    UISpuerScrollView.prototype.onChangeSize = function () {
+        var widget = this.view.getComponent(cc.Widget);
+        if (!widget)
+            return;
+        widget.updateAlignment();
+    };
+    /** 释放 功能用于上拉加载下拉刷新 解锁头尾固定的尺寸 */
     UISpuerScrollView.prototype.release = function () {
         this.isMoveHeader = false;
         this.isMoveFooter = false;
@@ -160,7 +175,6 @@ var UISpuerScrollView = /** @class */ (function (_super) {
             var offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x;
             if (offset > 0 && this.isHeader && !this.isLockHeader && !this.isLockFooter) {
                 this.headerProgress = offset < EPSILON ? 0 : offset / this.headerOutOffset;
-                this.headerProgress = offset < EPSILON ? 0 : offset / this.headerOutOffset;
                 this.isMoveHeader = this.headerProgress >= this.headerMultiple;
                 this.emitPullDownEvent({ action: false, progress: this.headerProgress, progressStage: this.isMoveHeader ? "wait" : "touch" });
                 this.emitPullUpEvent({ action: false, progress: 0, progressStage: "release" });
@@ -176,7 +190,7 @@ var UISpuerScrollView = /** @class */ (function (_super) {
     UISpuerScrollView.prototype._dispatchEvent = function (event) {
         _super.prototype['_dispatchEvent'].call(this, event);
         if (event == 'scroll-ended') {
-            this.layout.scrollToHeaderOrFooter = false;
+            this.layout.scrollToHeaderOrFooter = false; //功能用于控制循环滚动时使用scrollTo方法滚动带来的效果问题 
         }
     };
     UISpuerScrollView.prototype._getContentTopBoundary = function () {
@@ -184,13 +198,14 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         var viewSize = this.view.getContentSize();
         var local = 0;
         if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) && this.layout.getReallySize().height > viewSize.height) {
-            local = this.layout.topBoundary;
+            local = this.layout.topBoundary; //返回头部item上边距
         }
         else {
+            //功能用于无内容/少量内容时也可以上拉加载下拉刷新 如果所有item加起来的尺寸不足以撑满整个可视区域时 直接使用view可视尺寸
             local = this._getContentBottomBoundary() + viewSize.height;
         }
         if (this.isHeader && this.isLockHeader) {
-            local += this.headerOutOffset;
+            local += this.headerOutOffset; //功能用于上拉加载 下拉刷新 让整个content多一个 headerOutOffset 的尺寸
         }
         return local;
     };
@@ -199,13 +214,14 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         var viewSize = this.view.getContentSize();
         var local = 0;
         if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) && this.layout.getReallySize().height > viewSize.height) {
-            local = this.layout.bottomBoundary;
+            local = this.layout.bottomBoundary; //返回尾部item上边距
         }
         else {
+            //功能用于无内容/少量内容时也可以上拉加载下拉刷新 如果所有item加起来的尺寸不足以撑满整个可视区域时 直接使用view可视尺寸
             local = this.layout.node.y - this.layout.node.getAnchorPoint().y * viewSize.height;
         }
         if (this.isFooter && this.isLockFooter) {
-            local -= this.footerOutOffset;
+            local -= this.footerOutOffset; //功能用于上拉加载 下拉刷新 让整个content多一个 footerOutOffset 的尺寸
         }
         return local;
     };
@@ -214,13 +230,14 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         var viewSize = this.view.getContentSize();
         var local = 0;
         if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.header) && this.layout.getReallySize().width > viewSize.width) {
-            local = this.layout.leftBoundary;
+            local = this.layout.leftBoundary; //返回头部item左边距
         }
         else {
+            //功能用于无内容/少量内容时也可以上拉加载下拉刷新 如果所有item加起来的尺寸不足以撑满整个可视区域时 直接使用view可视尺寸
             local = this.layout.node.x - this.layout.node.getAnchorPoint().x * viewSize.width;
         }
         if (this.isHeader && this.isLockHeader) {
-            local -= this.headerOutOffset;
+            local -= this.headerOutOffset; //功能用于上拉加载 下拉刷新 让整个content多一个 headerOutOffset 的尺寸
         }
         return local;
     };
@@ -229,25 +246,26 @@ var UISpuerScrollView = /** @class */ (function (_super) {
         var viewSize = this.view.getContentSize();
         var local = 0;
         if (((_a = this.layout) === null || _a === void 0 ? void 0 : _a.footer) && this.layout.getReallySize().width > viewSize.width) {
-            local = this.layout.rightBoundary;
+            local = this.layout.rightBoundary; //返回头部item右边距
         }
         else {
+            //功能用于无内容/少量内容时也可以上拉加载下拉刷新 如果所有item加起来的尺寸不足以撑满整个可视区域时 直接使用view可视尺寸
             local = this._getContentLeftBoundary() + viewSize.width;
         }
         if (this.isFooter && this.isLockFooter) {
-            local += this.footerOutOffset;
+            local += this.footerOutOffset; //功能用于上拉加载 下拉刷新 让整个content多一个 footerOutOffset 的尺寸
         }
         return local;
     };
     UISpuerScrollView.prototype._startAutoScroll = function (deltaMove, timeInSecond, attenuated) {
-        if (this.isCalculPull) {
-            if (this.isMoveHeader && !this.isLockHeader) {
+        if (this.isCalculPull) { // 如果没有刷新/加载的监听者 则不计算 
+            if (this.isMoveHeader && !this.isLockHeader) { // 锁住头部 意思就是已经触发了下拉事件 应用层应该做些刷新的动作
                 this.isLockHeader = true;
                 this.vertical && (deltaMove.y -= this.headerOutOffset);
                 this.horizontal && (deltaMove.x += this.headerOutOffset);
                 this.emitPullDownEvent({ action: true, progress: this.headerProgress, progressStage: 'lock' });
             }
-            else if (this.isMoveFooter && !this.isLockFooter) {
+            else if (this.isMoveFooter && !this.isLockFooter) { // 锁住尾部 意思就是已经触发了上拉事件 应用层应该做些加载的动作
                 this.isLockFooter = true;
                 this.vertical && (deltaMove.y += this.footerOutOffset);
                 this.horizontal && (deltaMove.x -= this.footerOutOffset);
@@ -259,39 +277,40 @@ var UISpuerScrollView = /** @class */ (function (_super) {
     UISpuerScrollView.prototype._updateScrollBar = function (outOfBoundary) {
         _super.prototype['_updateScrollBar'].call(this, outOfBoundary);
         if (!this.isCalculPull)
-            return;
+            return; // 如果没有刷新/加载的监听者 则不计算 
         if (this['_autoScrollBraking'])
-            return;
+            return; // 自动回弹时不计算 （非手动）
         if (!this.autoScrolling)
-            return;
+            return; // 非自动滚动时不计算 
         var offset = this.vertical ? outOfBoundary.y : -outOfBoundary.x;
-        if (offset > 0) {
-            var progress = offset < EPSILON ? 0 : offset / this.headerOutOffset;
+        if (offset > 0) { // 下滑
+            var progress = offset < EPSILON ? 0 : offset / this.headerOutOffset; //根据参数 headerOutOffset 计算当前下滑的办百分比
             var progressStage = void 0;
             if (this.isLockHeader) {
                 this.headerProgress = this.headerProgress == 1 ? this.headerProgress : Math.max(progress, 1);
-                progressStage = 'lock';
+                progressStage = 'lock'; //锁定状态
             }
             else {
                 this.headerProgress = progress < this.headerProgress ? progress : this.headerProgress;
-                progressStage = 'release';
+                progressStage = 'release'; //释放状态
             }
             this.emitPullDownEvent({ action: false, progress: this.headerProgress, progressStage: progressStage });
         }
-        else if (offset < 0) {
-            var progress = -offset < EPSILON ? 0 : -offset / this.footerOutOffset;
+        else if (offset < 0) { //上拉
+            var progress = -offset < EPSILON ? 0 : -offset / this.footerOutOffset; //根据参数 footerOutOffset 计算当前下滑的办百分比
             var progressStage = void 0;
             if (this.isLockFooter) {
                 this.footerProgress = this.footerProgress == 1 ? this.footerProgress : Math.max(progress, 1);
-                progressStage = 'lock';
+                progressStage = 'lock'; //锁定状态
             }
             else {
                 this.footerProgress = progress < this.footerProgress ? progress : this.footerProgress;
-                progressStage = 'release';
+                progressStage = 'release'; //释放状态
             }
             this.emitPullUpEvent({ action: false, progress: this.footerProgress, progressStage: progressStage });
         }
         else if (offset == 0) {
+            // 正常滑动时 如果没有锁定头和尾时 释放所有进度
             if (!this.isLockHeader && !this.isLockFooter) {
                 this.clearProgress();
             }

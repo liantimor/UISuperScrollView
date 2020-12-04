@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:38
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-12-03 15:10:51
+ * @Last Modified time: 2020-12-04 14:41:01
  * @Description: Description
  */
 var UISuperLayout_1 = require("./UISuperLayout");
@@ -71,18 +71,22 @@ var UISpuerItem = /** @class */ (function (_super) {
     UISpuerItem.prototype.onLoad = function () {
         // 向node写入一个方法 省去了先获取组件然后调用的步骤
         this.node['watchSelf'] = this.watchSelf.bind(this);
+        this.node['saveOriginSize'] = this.saveOriginSize.bind(this);
         var widget = this.node.getComponent(cc.Widget);
         if (widget) {
             cc.warn("UISuperItem: item不允许挂cc.Widget组件 请手动移除");
             this.node.removeComponent(widget);
         }
     };
-    UISpuerItem.prototype.init = function (layout) {
-        this.layout = layout;
-        this.layout.node.on(UISuperLayout_1.UIChangeBrotherEvnet, this.onChangeBrother, this);
+    UISpuerItem.prototype.saveOriginSize = function () {
         this.originSize = cc.size(this.width, this.height);
         this.node.setContentSize(this.originSize);
         this.originScale = cc.v2(this.node.scaleX, this.node.scaleY);
+    };
+    UISpuerItem.prototype.init = function (layout) {
+        this.layout = layout;
+        this.layout.node.on(UISuperLayout_1.UIChangeBrotherEvnet, this.onChangeBrother, this);
+        this.saveOriginSize();
         this.node.on(cc.Node.EventType.SIZE_CHANGED, this.watchSize, this);
         this.node.on(cc.Node.EventType.SCALE_CHANGED, this.watchSize, this);
         this.onChangeBrother();
