@@ -3,7 +3,7 @@
  * @Email: icipiqkm@gmail.com
  * @Date: 2020-11-19 01:15:52
  * @Last Modified by: steveJobs
- * @Last Modified time: 2020-12-04 14:40:56
+ * @Last Modified time: 2021-01-23 18:05:39
  * @Description: 名词说明 什么是一组item？
  * 垂直模式  
  * 1,2,3 一组item包含 1,2,3  1是一组item中header 也是整个列表的header 3是一组item中footer 9是整个列表的footer
@@ -650,6 +650,8 @@ export default class UISuperLayout extends cc.Component {
             let spuerItem = child.getComponent(UISpuerItem) || child.addComponent(UISpuerItem)
             this.node.addChild(child)
             spuerItem.init(this)
+            // item在首次创建时立即刷新 避免显示item初始状态
+            this.notifyRefreshItem(child)
             // 如果创建的是第一个item 设置他的起始位置 之后的item会自动相对于他来设置自己 我们只需要确定第一个位置就行了
             if (this.node.childrenCount == 1) {
                 let pos = this.getGroupHeader(this.header) //获取一组item中头部位置
@@ -713,7 +715,7 @@ export default class UISuperLayout extends cc.Component {
                 let startTime = new Date().getTime()
                 for (let iter = gen.next(); ; iter = gen.next()) {
                     if (iter == null || iter.done) {
-                        resolve()
+                        resolve(null)
                         return
                     }
                     if (new Date().getTime() - startTime > duration) {
