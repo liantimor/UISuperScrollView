@@ -20,4 +20,4 @@
 * UISuperLayout.resetScrollView 重置列表 当列表滑动到底部时 然后不管通过什么方式(同步|异步)减少了整体的(尺寸|缩放) 时保证内容显示正确
 * 喜欢的话别忘记点个 Star 谢谢
 
-<img src="https://github.com/icipiqkm/UISuperScrollView/blob/main/image/IMAGE%202021-01-25%2017:07:57.jpg" height="400"> <img src="https://github.com/icipiqkm/UISuperScrollView/blob/main/image/IMAGE%202021-01-25%2017:07:52.jpg" height="400">
+<img src="https://github.com/icipiqkm/UISuperScrollView/blob/main/image/IMAGE%202021-01-25%2017:07:57.jpg" height="400"> <img 
