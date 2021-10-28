@@ -1,6 +1,6 @@
 # UISuperScrollView 针对CocosCreator2.x cc.ScrollView做的优化 
 
-[CocosCreator3.x 新版在这里](https://github.com/icipiqkm/super-scrollview)
+[新版在这里,支持2.x 3.x 支持更多功能](https://store.cocos.com/app/detail/3326)
 
 [在线演示效果](https://icipiqkm.github.io/UISuperScrollView/)
 
